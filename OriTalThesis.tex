@@ -23,10 +23,10 @@
 %----------------------------------------------------------------------------------------
 
 \documentclass[
-11pt, % The default document font size, options: 10pt, 11pt, 12pt
+12pt, % The default document font size, options: 10pt, 11pt, 12pt
 %oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
 english, % ngerman for German
-onehalfspacing, % Single line spacing, alternatives: singlespacing, onehalfspacing or doublespacing
+doublespacing, % Single line spacing, alternatives: singlespacing, onehalfspacing or doublespacing
 %draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
 %nolistspacing, % If the document is onehalfspacing or doublespacing, uncomment this to set spacing in lists to single
 %liststotoc, % Uncomment to add the list of figures/tables/etc to the table of contents
@@ -41,12 +41,23 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 
-\usepackage{palatino} % Use the Palatino font by default
+%\usepackage{palatino} % Use the Palatino font by default
+\usepackage{mathptmx}
 \usepackage[square,numbers]{natbib}
 \usepackage{multicol,graphicx}
 \usepackage{subcaption}
-
-
+\usepackage{placeins}
+\usepackage{booktabs}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{filecontents}
+\usepackage{placeins}
+\usepackage[export]{adjustbox}
+\usepackage{makecell}
+\usepackage{caption}
+\usepackage{color}
+\usepackage{float}
 
 \usepackage[autostyle=true]{csquotes}
 \graphicspath{ {Figures/} }
@@ -68,7 +79,7 @@ headsepline, % Uncomment to get a line under the header
 %	THESIS INFORMATION
 %----------------------------------------------------------------------------------------
 
-\thesistitle{Thesis 22 Title} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\thesistitle{TODO} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
 \supervisor{Dr. James \textsc{Smith}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{Doctor of Philosophy} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
@@ -103,7 +114,7 @@ headsepline, % Uncomment to get a line under the header
 
 \vspace*{.06\textheight}
 {\scshape\LARGE \univname\par}\vspace{1.5cm} % University name
-\textsc{\Large Doctoral Thesis}\\[0.5cm] % Thesis type
+\textsc{\Large Master Thesis}\\[0.5cm] % Thesis type
 
 \HRule \\[0.4cm] % Horizontal line
 {\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
@@ -138,29 +149,6 @@ headsepline, % Uncomment to get a line under the header
 \end{titlepage}
 
 %----------------------------------------------------------------------------------------
-%	DECLARATION PAGE
-%----------------------------------------------------------------------------------------
-
-\begin{declaration}
-\addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
-\noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
-
-\begin{itemize} 
-\item This work was done wholly or mainly while in candidature for a research degree at this University.
-\item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
-\item Where I have consulted the published work of others, this is always clearly attributed.
-\item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
-\item I have acknowledged all main sources of help.
-\item Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself.\\
-\end{itemize}
- 
-\noindent Signed:\\
-\rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
- 
-\noindent Date:\\
-\rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
-\end{declaration}
-%----------------------------------------------------------------------------------------
 %	ABSTRACT PAGE
 %----------------------------------------------------------------------------------------
 \begin{abstract}
@@ -180,57 +168,10 @@ The acknowledgments and the people to thank go here, don't forget to include you
 
 \tableofcontents % Prints the main table of contents
 
-\listoffigures % Prints the list of figures
+%\listoffigures % Prints the list of figures
 
-\listoftables % Prints the list of tables
+%\listoftables % Prints the list of tables
 
-%----------------------------------------------------------------------------------------
-%	ABBREVIATIONS
-%----------------------------------------------------------------------------------------
-
-\begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
-
-\textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere\\
-\textbf{WSF} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or\\
-
-\end{abbreviations}
-
-%----------------------------------------------------------------------------------------
-%	PHYSICAL CONSTANTS/OTHER DEFINITIONS
-%----------------------------------------------------------------------------------------
-
-\begin{constants}{lr@{${}={}$}l} % The list of physical constants is a three column table
-
-% The \SI{}{} command is provided by the siunitx package, see its documentation for instructions on how to use it
-
-Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
-%Constant Name & $Symbol$ & $Constant Value$ with units\\
-
-\end{constants}
-
-%----------------------------------------------------------------------------------------
-%	SYMBOLS
-%----------------------------------------------------------------------------------------
-
-\begin{symbols}{lll} % Include a list of Symbols (a three column table)
-
-$a$ & distance & \si{\meter} \\
-$P$ & power & \si{\watt} (\si{\joule\per\second}) \\
-%Symbol & Name & Unit \\
-
-\addlinespace % Gap to separate the Roman symbols from the Greek
-
-$\omega$ & angular frequency & \si{\radian} \\
-
-\end{symbols}
-
-%----------------------------------------------------------------------------------------
-%	DEDICATION
-%----------------------------------------------------------------------------------------
-
-\dedicatory{For/Dedicated to/To my\ldots} 
-
-%----------------------------------------------------------------------------------------
 %	THESIS CONTENT - CHAPTERS
 %----------------------------------------------------------------------------------------
 
@@ -247,9 +188,9 @@ $\omega$ & angular frequency & \si{\radian} \\
 
 Neural networks have recently been shown to achieve outstanding performance in several machine learning domains such as image recognition \cite{krizhevsky2012imagenet}  and voice recognition~\cite{hinton2012deep}. Most of these breakthroughs have been achieved with convolutional neural networks (CNNs)~\cite{Lenet98}, but some promising results has also been demonstrated by using recurrent neural networks (RNNs) for tasks such as speech and handwriting recognition~\cite{graves2013speech, graves2008unconstrained}, usually when using the long short-term memory (LSTM) architecture ~\cite{LSTM_origin}.
 
-\begin{samepage}
-	There have been some studies on using ``deep neural networks'' for P300 classification \cite{P300_CNN, RSVP_P300_geva}. The results reported, despite some success, do not show the same dramatic progress achieved by `deep learning' methods as compared to the previous state of the art; while in areas such as image or voice recognition `deep' neural networks have resulted in classification accuracy exceeding other methods by far, this has not yet been the case with EEG in general and P300 detection specifically. The small number of samples typically available in neuroscience (or BCI) is most likely one of the main reasons. In addition, the high dimensionality of the EEG signal, the low signal to noise (SNR) and the existence of outliers in the data, pose other difficulties when trying to use neural networks for BCI tasks (see \cite{lotte2007review}). The main question in this research is whether the RNN model, and particularly LSTM, can enhance the accuracy of P300-based BCI systems and if so, under what conditions.
-\end{samepage}
+
+There have been some studies on using ``deep neural networks'' for P300 classification \cite{P300_CNN, RSVP_P300_geva}. The results reported, despite some success, do not show the same dramatic progress achieved by `deep learning' methods as compared to the previous state of the art; while in areas such as image or voice recognition `deep' neural networks have resulted in classification accuracy exceeding other methods by far, this has not yet been the case with EEG in general and P300 detection specifically. The small number of samples typically available in neuroscience (or BCI) is most likely one of the main reasons. In addition, the high dimensionality of the EEG signal, the low signal to noise (SNR) and the existence of outliers in the data, pose other difficulties when trying to use neural networks for BCI tasks (see \cite{lotte2007review}). The main question in this research is whether the RNN model, and particularly LSTM, can enhance the accuracy of P300-based BCI systems and if so, under what conditions.
+
 
 \vspace{0.4cm}
 \section{BACKGROUND}
@@ -347,11 +288,170 @@ For all the experiments, the different model were training using RMSProp~\cite{t
 
 RMSProp \cite{tieleman2012lecture} is a stochastic gradient descent(SGD) method. Unlike simple SGD, the method can adapt different learning rate for each parameter separately and use moving average across the past gradient in order to scale the per-feature it. We decided to use RMSProp since it is said to be robust and fast \cite{xu2015show, karpathy2015deep, szegedy2016rethinking}.
 
-%\include{Chapters/Chapter1}
-%\include{Chapters/Chapter2} 
-%\include{Chapters/Chapter3}
-%\include{Chapters/Chapter4} 
-%\include{Chapters/Chapter5} 
+\chapter{Results}
+
+
+
+Tab.\ref{table:AllAverageedResults} summarizes the results of the different experiments; all results are based on an average of 10 consecutive trials to detect the target letter, as in~\cite{BlaknertzExperiment}. The results for training and testing on the same subject (Tab.\ref{table:AccuracyPerSubject}) indicates that LSTM is inferior (82\%), and even the LSTM\_CNN combined model performs less than the the simple LDA method (86 and 93\% in the LSTM\_CNN models and 96\% using LDA) . A possible advantage for LSTM only becomes apparent with larger amounts of data -- when training and testing on all the subjects together (Tab.\ref{table:AllAverageedResults}). The large LSTM model performs poorly -- 77\%; we suspect it is due to the large number of trainable parameters -- 62501 (``over-fitting''); this is why we introduced CNN as a first layer and reduced number of hidden LSTM cells.
+
+Tab.\ref{table:AccuracyPerSubject} summarizes the results per single subject. When comparing the accuracy result of each subject separately, we can see there is significant difference among subjects, across the different models. For example subject \textit{fat} results in higher accuracy than \textit{icn} regardless of the tested model. Eventually, the best network method - using training on other subjects and recalibration with a combined CNN-LSTM large model, is able to boost the results of the worse subject to 86\%.
+
+\vspace{0.4cm}	
+\begin{table*}[t]
+	\captionof{table}{Average accuracy across all experiments.}
+	\label{table:AllAverageedResults}
+	\centering
+	\begin{tabular}{l|ccccc}
+		\toprule
+		model &  \makecell{number of \\parameter} &  \makecell{accuracy \\
+			per subjects} & \makecell{accuracy \\
+			all subjects}&\makecell{all but one}&\makecell{all but one \\ after fine tuning}\\
+		\midrule
+		LDA            &            1375 &                   0.96 &                  0.79 &                           0.65 &                                                 x \\
+		%MLP            &             148201 &                   0.88 &                     x &                              x &                                                 x \\
+		LSTM large       &          62501 &                   0.82 &                  0.77 &                              x &                                                 x \\
+		LSTM small     &           10351 &                   0.89 &                   0.9 &                              x &                                                 x \\
+		CNN            &            7924 &                   0.98 &                  0.92 &                           0.84 &                                              0.97 \\
+		\makecell{LSTM-CNN\\large}&           49041 &                   0.93 &                   0.9 &                              x &                                                 x \\
+		\makecell{LSTM-CNN\\small}&            5511 &                   0.86 &                  0.93 &                           0.84 &                                              0.97 \\
+		\bottomrule
+	\end{tabular}
+	
+\end{table*}
+
+\begin{table*}
+	\centering
+	\captionof{table}{Average accuracy per subject.}
+	\label{table:AccuracyPerSubject}	
+	\begin{tabular}{l|ccccccc}
+		\toprule
+		{subject} &   LDA &   LSTM large &  LSTM-CNN large &   CNN &  LSTM small& LSTM-CNN small \\
+		\midrule
+		fat     &  1.00 &  0.98 &      0.98 &  0.98 &        1.00 &            0.95 \\
+		gcb     &  0.91 &  0.82 &      0.88 &  0.92 &        0.74 &            0.75 \\
+		gcc     &  1.00 &  0.84 &      0.92 &  1.00 &        0.92 &            0.97 \\
+		gcd     &  0.97 &  0.80 &      0.90 &  1.00 &        0.76 &            0.93 \\
+		gcf     &  1.00 &  0.92 &      0.94 &  0.95 &        0.97 &            0.95 \\
+		gcg     &  0.94 &  0.74 &      0.96 &  0.96 &        0.80 &            0.87 \\
+		gch     &  0.97 &  0.93 &      0.96 &  0.97 &        0.97 &            0.96 \\
+		iay     &  0.94 &  0.62 &      0.92 &  0.98 &        0.75 &            0.86 \\
+		icn     &  0.94 &  0.62 &      0.86 &  0.98 &        0.77 &            0.77 \\
+		icr     &  0.93 &  0.97 &      0.98 &  0.98 &        0.98 &            0.98 \\
+		pia     &  0.97 &  0.82 &      0.94 &  1.00 &        0.77 &            0.81 \\
+		mean    &  0.96 &  0.82 &      0.93 &  0.98 &        0.86 &            0.89 \\
+		\bottomrule
+	\end{tabular}
+	
+\end{table*}
+
+In the second stage, we continue training the model on the rest $3/4$ of the \textbf{test subject's} data using a smaller learning rate (0.0001 using RMSProp) for 30 epochs. The second training stage results are presented in columns \textit{CNN and LSTM-CNN all except one fine tune }. The results indicate that as in the other cross-subject evaluation, the LDA accuracy is much poorer than those of the CNN and LSTM-CNN models (65\% as opposed to 84\%). When we allow calibrating the model for each subject, we achieve an average accuracy of 97\% for both CNN and LSTM-CNN.
+
+\begin{table*}[t]
+	\centering
+	\captionof{table}{Accuracy when training and testing on different subjects. }
+	\label{table:AllExceptOne}	
+	\begin{tabular}{l|ccccc}
+		\toprule
+		{subject} & \makecell{LDA \\ all except one} &  \makecell{CNN\\all except one}&  \makecell{CNN\\all except one\\fine tune}& \makecell{SMALL LSTM-CNN\\all except one}&\makecell{SMALL LSTM-CNN\\all except one \\ fine tune} \\
+		\midrule
+		fat     &                  0.94 &                  1.00 &                            1.00 &                             0.98 &                                               1.00 \\
+		gcb     &                  0.43 &                  0.83 &                            0.91 &                             0.86 &                                               0.92 \\
+		gcc     &                  0.79 &                  0.98 &                            0.98 &                             0.95 &                                               0.97 \\
+		gcd     &                  0.66 &                  0.80 &                            0.99 &                             0.83 &                                               0.97 \\
+		gcf     &                  0.68 &                  0.89 &                            0.98 &                             0.79 &                                               0.98 \\
+		gcg     &                  0.52 &                  0.81 &                            0.94 &                             0.77 &                                               0.90 \\
+		gch     &                  0.87 &                  0.97 &                            0.97 &                             0.97 &                                               0.99 \\
+		iay     &                  0.48 &                  0.69 &                            0.98 &                             0.67 &                                               0.97 \\
+		icn     &                  0.44 &                  0.58 &                            0.92 &                             0.61 &                                               0.95 \\
+		icr     &                  0.63 &                  0.81 &                            1.00 &                             0.89 &                                               1.00 \\
+		pia     &                  0.77 &                  0.87 &                            0.96 &                             0.91 &                                               0.97 \\
+		mean    &                  0.65 &                  0.84 &                            0.97 &                             0.84 &                                               0.97 \\
+		\bottomrule
+	\end{tabular}
+\end{table*}
+
+\vspace{5mm}
+
+Resistance to temporal noise is displayed in Tab.\ref{table:ResistenceToNoise}. LSTM-CNN shows a significant advantage over both LDA and CNN when testing with stimuli onset different than the one used for training. LSTM-CNN-small achieves an accuracy higher by 3\% and 6\% when adding or removing 40ms to the original stimuli onset, and a t-test indicates that the difference between each pair of groups are statistically significant ($p < 0.05$ - marked in bold). LDA accuracy fall by more than 20\% when facing temporal noise.
+
+A possible explanation can be seen when looking at the two models' saliency map (Fig.\ref{fig:t}). In order to investigate the ``attention'', or the sensitivity of the LSTM model, and compare it to the CNN model, we used a technique suggested by~\cite{graves2012supervised} and draw the absolute gradient of the neural network with respect to the input.
+
+If $f(x_{1}, ..., x_{n})$ is a differentiable, scalar-valued function, its gradient is the vector whose components are the $n$ partial derivatives of $f$, which is a vector-valued function. In our case of $f(x|\theta)$ is the neural network with fixed weights $\theta$ and input $x$. The partial derivatives of $f(x|\theta)$ with respect to $x$ can be interpreted as ``how changing each value of $x$ will change the prediction score''. This gradient should not be confused with the gradient used for training, where the goal is to optimize the model parameters $\theta$ when $x$ is fixed.
+
+
+	In the case of P300 prediction, $x$ is a matrix of $C\times{T}$ ($C$ - number of channels, $T$ - number of time steps) and $f(x|\theta)$ is the neural network where $\theta$ is the model's weights after training. The gradient $\nabla{f(x|\theta)}$ (see Eq.\ref{eq:4}) is a matrix with the same size as the input $x$, where the amplitude of each cell reflects its impact on the function value. Cells with high absolute value can be interpreted as the cells that have a significant influence on the prediction function.
+	
+	\begin{equation}\label{eq:4}
+	\nabla f\left( {x|\theta } \right) = \left[ {\begin{array}{*{20}{c}}
+		{\frac{{\partial f\left( {x|\theta } \right)}}{{\partial x\left( {{c_1},{t_1}} \right)}}}&{...}&{\frac{{\partial f\left( {x|\theta } \right)}}{{\partial x\left( {{c_1},{t_T}} \right)}}}\\
+		{...}&{...}&{...}\\
+		{\frac{{\partial f\left( {x|\theta } \right)}}{{\partial x\left( {{c_C},{t_1}} \right)}}}&{...}&{\frac{{\partial f\left( {x|\theta } \right)}}{{\partial x\left( {{c_C},{t_T}} \right)}}}
+		\end{array}} \right]
+	\end{equation}
+
+
+The results displayed in Fig.\ref{fig:CNNSaliencyMap2} and Fig.\ref{fig:LSTMCNNSaliencyMap2} show the average absolute gradient across all the \textit{target} samples of a single cross validation test data: the warm colors correspond to high gradient values, indicating that the model is more sensitive to change in this input feature. We can see the sensitivity of the CNN model spread across the recording relatively evenly as opposed to the LSTM-CNN which is focused around the 250ms and 450ms time-stamps.
+
+\begin{small}
+	\captionof{table}{Accuracy when introducing temporal noise.}
+	\label{table:ResistenceToNoise}
+	\centering
+	
+	\begin{tabular}{l|ccc}
+		\toprule
+		{Noise} &  CNN &  LSTM\_CNN &  LDA\\
+		\midrule
+		-120  &         0.058 &              0.044 &         0.016 \\
+		-80   &         0.275 &              0.299 &         0.016 \\
+		-40   &         \textbf{0.825} &              \textbf{0.864} &  \textbf{0.565} \\
+		40   &         \textbf{0.848} &              \textbf{0.896} &   \textbf{0.608} \\
+		80   &         0.335 &              0.390 &         0.260 \\
+		120  &         0.042 &              0.042 &         0.059 \\
+		\bottomrule
+	\end{tabular}
+	
+\end{small}
+
+\vspace{0.5cm}
+
+\begin{figure*}
+	\centering
+	%	\begin{subfigure}{.225\textwidth}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\captionsetup{justification=raggedright,
+			singlelinecheck=false,
+			margin=9em
+		}
+		\includegraphics[width=0.9\textwidth]{cnn_sailency.png}
+		\caption{CNN}
+		\label{fig:CNNSaliencyMap2}
+	\end{subfigure}\hspace*{-3em}
+	%	\begin{subfigure}{.225\textwidth}
+	\begin{subfigure}{.5\textwidth}
+		\captionsetup{justification=raggedright,
+			singlelinecheck=false,
+			margin=7em
+		}
+		\centering
+		\includegraphics[width=0.9\textwidth,left]{lstm_cnn_sailency.png}
+		\centering
+		\caption{LSTM-CNN}
+		\label{fig:LSTMCNNSaliencyMap2}
+	\end{subfigure}
+	\caption{Average gradient across target samples.}
+	\label{fig:t}
+\end{figure*}
+
+
+
+
+
+\chapter{Discussion}
+
+In this work we examined using LSTM neural networks for the task of the BCI task of P300 speller. Despite its temporal nature, no version of LSTM investigated in this work has shown a significant advantage compared to the CNN model suggested by \cite{P300_CNN}. We did see LSTM results improve with large amounts of data from multiple subjects, and superior results with a combined CNN-LSTM model; moreover, we have shown that this combined model is significantly more robust to temporal noise in the stimuli onset. We also show that the sensitivity of the LSTM based model is much more focused on the area between 250ms to 450ms than CNN based model. This sensitivity is correlated with what we know about the P300 ERP (a peak around 300ms after the stimuli onset). We thus believe that the smaller area of the sensitivity explains the robustness of the LSTM model to noise in the time domain, since it is less sensitive to the data outside the P300 phenomena.  
+
+
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - APPENDICES
@@ -362,9 +462,7 @@ RMSProp \cite{tieleman2012lecture} is a stochastic gradient descent(SGD) method.
 % Include the appendices of the thesis as separate files from the Appendices folder
 % Uncomment the lines as you write the Appendices
 
-\include{Appendices/AppendixA}
-%\include{Appendices/AppendixB}
-%\include{Appendices/AppendixC}
+
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
