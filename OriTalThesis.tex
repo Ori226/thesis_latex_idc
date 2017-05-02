@@ -26,7 +26,7 @@
 11pt, % The default document font size, options: 10pt, 11pt, 12pt
 %oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
 english, % ngerman for German
-singlespacing, % Single line spacing, alternatives: onehalfspacing or doublespacing
+onehalfspacing, % Single line spacing, alternatives: singlespacing, onehalfspacing or doublespacing
 %draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
 %nolistspacing, % If the document is onehalfspacing or doublespacing, uncomment this to set spacing in lists to single
 %liststotoc, % Uncomment to add the list of figures/tables/etc to the table of contents
@@ -43,14 +43,13 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{palatino} % Use the Palatino font by default
 \usepackage[square,numbers]{natbib}
-% \usepackage[backend=bibtex,style=ieeetrans,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\usepackage{multicol,graphicx}
+\usepackage{subcaption}
 
-%\addbibresource{example.bib} % The filename of the bibliography
-%\bibliography{bci_conf}
-%\bibliographystyle{ieeetrans}
 
-\usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 
+\usepackage[autostyle=true]{csquotes}
+\graphicspath{ {Figures/} }
 %----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
 %----------------------------------------------------------------------------------------
@@ -275,6 +274,78 @@ LSTM was already used for analysing EEG data for emotion detection \cite{soleyma
 	\item algorithm long explanation
 \end{itemize}
 
+\chapter{MATERIALS AND METHODS}
+
+We compared the performance of LSTM based methods with other methods on a dataset from a RSVP P300 speller study~\cite{BlaknertzExperiment}. We used  average prediction across 10 trials to measure the P300 speller accuracy as applied in~\cite{BlaknertzExperiment}.
+
+The dataset includes 55 channels of EEG recordings from 11 subjects. Each subject is presented with 10 repetitions of 60 to 70 sets of 30 different letters and symbols. In total there are approximately 20,000 samples for each subject where 1/30 of them are supposed to contain a P300 wave. While the original experiment contains 3 different settings (interval of 116ms with/without colors and 83ms with color), we used the experiment setting of 116ms intervals with letters in different colors. For more detail, see \cite{BlaknertzExperiment}. 
+
+In addition to the filters applied in~\cite{BlaknertzExperiment}, all models that we used share the same pre-processing stage of down-sampling the input frequency from 200Hz to 25 Hz. The result is that each learning sample is a matrix of 55 channels with 25 time samples each, or $55*25 = 1375$ features. Each sample thus covers exactly 1 second around the target event, at times [-200,800] ms.
+
+The models evaluated in this experiment are:
+\begin{itemize}
+	\item LDA - A common method used in P300 classification for BCI is LDA \cite{BlaknertzExperiment,P300_Tutorial}. Here we will use a simplified version; unlike \cite{BlaknertzExperiment} we use all the timestamps as features, and we are using a non-shrinkage version of LDA.
+	
+	\item CNN (Fig.\ref{fig:CNN_model}) -- The CNN model we use is similar to the one used in \cite{P300_CNN}. The first layer is composed of 10  spatial filters, each of size $55*1$ -- the number of channels. The second layer contains 13 different temporal filters with size of $1*5$. Each one of the temporal filters processes 5 subsequent time stamps without overlapping. The third and fourth layers are simple fully connected layers followed by a single cell with sigmoid activation function that emits a scalar.
+	
+	\item LSTM large/small (Fig.\ref{fig:LSTM_model}) -- LSTM large/small are both composed of single LSTM layers with 100 and 30 hidden cells in each, correspondingly. Both models end with a single cell with sigmoid activation layer that emits a scalar.
+	
+	\item LSTM-CNN large/small Fig.\ref{fig:LSTM_model_CNN} -- The model has CNN as a first layer (the spatial domain layer) and LSTM as the second layer for the temporal domain. The first convolutional layer is the same as in the CNN model. Unlike the CNN model, the temporal layer is an LSTM layer with 100/30 hidden cells. The last layer contains a single cell a with sigmoid activation layer that emits a scalar.
+
+\end{itemize}
+
+	\begin{figure*}[t]
+		\centering
+		\begin{minipage}{.3\textwidth}
+			\centering
+			\begin{subfigure}{1.0\textwidth}
+				\centering
+				\includegraphics[height=5cm]{P300_CNN_arch}
+				%	\end{center}
+				\caption{CNN model}
+				\label{fig:CNN_model}
+			\end{subfigure}
+		\end{minipage}	
+		\begin{minipage}{.3\textwidth}
+			
+			\centering
+			\begin{subfigure}{1.0\textwidth}
+				\centering
+				\includegraphics[height=5cm]{P300_LSTM_arch_v3}
+				%	\end{center}
+				\caption{LSTM model}
+				\label{fig:LSTM_model}
+			\end{subfigure}
+			
+		\end{minipage}%
+		\begin{minipage}{.3\textwidth}
+			\centering
+			\begin{subfigure}{1.0\textwidth}
+			\centering
+			\includegraphics[height=5cm]{P300_LSTM_CNN_arch_v3}		
+			%	\end{center}
+			\caption{CNN-LSTM model}
+			\label{fig:LSTM_model_CNN}		
+			\end{subfigure}
+		\end{minipage}
+		
+		\caption{Schematic diagrams of the neural networks evaluated. FC stands for fully connected layers.}
+	\end{figure*}
+								
+								
+In order to examine the power of each method in modelling the inter-subject and  intra-subject variance we have conducted the following experiments:
+\begin{enumerate}
+	\item Training and testing on each subject's data separately in order to explore intra-subject generalization.
+	\item Training and testing on all the different subjects data combined in order to investigate the impact of larger amounts of data.
+	\item Training on all subjects expect one. We conduct this experiment in order to explore the value of using a model that was trained off-line, on different subjects, and then use this model on new subject, with or without additional calibration.
+\end{enumerate}
+									
+A highly desired property from BCI systems is tolerance to a small degree of noise in the stimuli onset time.  In order to evaluate the resistance to such noise, we use a model trained on the original stimuli onset (i.e, noise level = 0ms) and evaluate its performance on different stimuli onset: noise levels of -120ms,-80ms,-40ms, +40ms, +80ms, and 120ms. We conducted this experiment using 10-fold cross validation in order to be able to get statistically significant results. This last experiment was conducted only on the CNN and LSTM-CNN models and used data from all subjects (as in experiment 2 described above).
+
+For all the experiments, the different model were training using RMSProp~\cite{tieleman2012lecture} optimizer, for 30 epochs with a learning rate of 0.001 and then continue to train for 30 epochs with the a learning rate of 0.00001.
+
+
+RMSProp \cite{tieleman2012lecture} is a stochastic gradient descent(SGD) method. Unlike simple SGD, the method can adapt different learning rate for each parameter separately and use moving average across the past gradient in order to scale the per-feature it. We decided to use RMSProp since it is said to be robust and fast \cite{xu2015show, karpathy2015deep, szegedy2016rethinking}.
 
 %\include{Chapters/Chapter1}
 %\include{Chapters/Chapter2} 
@@ -303,5 +374,11 @@ LSTM was already used for analysing EEG data for emotion detection \cite{soleyma
 %\printbibliography[heading=bibintoc]
 % simple comment
 %----------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 \end{document}  
