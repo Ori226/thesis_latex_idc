@@ -46,8 +46,8 @@ headsepline, % Uncomment to get a line under the header
 % \usepackage[backend=bibtex,style=ieeetrans,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
 %\addbibresource{example.bib} % The filename of the bibliography
-\bibliography{bci_conf}
-\bibliographystyle{ieeetrans}
+%\bibliography{bci_conf}
+%\bibliographystyle{ieeetrans}
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 
@@ -270,6 +270,10 @@ There are several reasons why LSTM is a good candidate for modelling the P300 pa
 
 LSTM was already used for analysing EEG data for emotion detection \cite{soleymani2014continuous} and a phenomena called behavioral microsleeps \cite{davidson2005detecting}. Bahshivan et al.~\cite{LSTM_EEG} modeled inter-subject EEG features for identifying cognitive load by using convolutional LSTM. They created a video from three different band powers in each electrode. One of the major differences between their work and ours is that we use the original signal without any feature extraction (such as band power), and we focus specifically on P300 speller.
 
+\section{TODO}
+\begin{itemize}
+	\item algorithm long explanation
+\end{itemize}
 
 
 %\include{Chapters/Chapter1}
@@ -296,7 +300,7 @@ LSTM was already used for analysing EEG data for emotion detection \cite{soleyma
 %----------------------------------------------------------------------------------------
 \bibliography{bci_conf}
 \bibliographystyle{ieeetrans}
-\printbibliography[heading=bibintoc]
+%\printbibliography[heading=bibintoc]
 % simple comment
 %----------------------------------------------------------------------------------------
 
