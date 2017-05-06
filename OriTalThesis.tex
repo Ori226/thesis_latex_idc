@@ -41,8 +41,8 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 
-%\usepackage{palatino} % Use the Palatino font by default
-\usepackage{mathptmx}
+\usepackage{palatino} % Use the Palatino font by default
+%\usepackage{mathptmx}
 \usepackage[square,numbers]{natbib}
 \usepackage{multicol,graphicx}
 \usepackage{subcaption}
@@ -209,6 +209,25 @@ Unlike feed forward network models such as CNN and multi-layer perceptron (MLP),
 There are several reasons why LSTM is a good candidate for modelling the P300 pattern. First, RNN and LSTM have shown success when modeling time series for tasks such as handwriting and speech recognition \cite{graves2013speech,  graves2008unconstrained, yue2015beyond}. Second, RNN is known to have the capability to approximate dynamical systems \cite{li2005approximation}, which makes it a natural candidate for modelling the dynamics of EEG data. Another motivation is that RNN can be seen as powerful form of hidden Markov models (HMM), which have been shown to classify EEG successfully \cite{solhjoo2005classification,obermaier2001hidden,cincotti2003comparison}; RNNs can be seen as HMMs with an exponentially large state space and an extremely compact parametrization~\cite{sutskever2009recurrent}.
 
 LSTM was already used for analysing EEG data for emotion detection \cite{soleymani2014continuous} and a phenomena called behavioral microsleeps \cite{davidson2005detecting}. Bahshivan et al.~\cite{LSTM_EEG} modeled inter-subject EEG features for identifying cognitive load by using convolutional LSTM. They created a video from three different band powers in each electrode. One of the major differences between their work and ours is that we use the original signal without any feature extraction (such as band power), and we focus specifically on P300 speller.
+
+
+
+\section{Deep Neural Networks - Overview}
+
+Although there is no single definition for Deep Learning, it can be defined as a branch of machine learning that focus on using Artificial Neural Networks (ANN). Deep Neural Network (DNN) is a network constructed from layers of ANN between the input and output. There are two main type of ANN architecture: Feed Forward Neural Networks(FFNN or FF) and Recurrent Neural Network(RNN). FF are network where the data flow only to the next layer in the network while RNN allows directed cycles within the network. The directed cycles in RNN allows the network to remember past event and make it suitable for sequence learning (4).
+
+
+
+\textbf{Fully Connect Layer - FC} - Simple form of ANN is a network with a single hidden layer often called Fully Connected Layer or FC. In FC layer, the output will be obtained by the following equation:
+\[y=\sigma \left( {xW + b} \right)\]
+Where $x$ is the input vector, $W$ is a matrix that represent a linear mapping and $b$ is vector that reflect the transformation called the $bias$ ($b$ holds the value for each output unit). $\sigma \left( \cdot \right)$ represent an element-wise non-linearity such as ReLU, sigomid or TanH:
+
+\[{\rm{Relu}}\left( x \right) = \max \left( {x,0} \right)\,\,\,\,\,\,{\rm{sigmoid}}\left( x \right) = \frac{1}{{1 + {e^{ - x}}}}\,\,\,\,\,\,{\mathop{\rm Tan}\nolimits} {\rm{H}}\left( x \right) = \frac{{{e^x} - {e^{ - x}}}}{{{e^x} + {e^{ - z}}}}\]
+
+
+
+
+
 
 \section{TODO}
 \begin{itemize}
