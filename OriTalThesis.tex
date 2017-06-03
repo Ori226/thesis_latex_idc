@@ -58,6 +58,7 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{caption}
 \usepackage{color}
 \usepackage{float}
+\usepackage{amsmath}
 
 \usepackage[autostyle=true]{csquotes}
 \graphicspath{ {Figures/} }
@@ -88,7 +89,7 @@ headsepline, % Uncomment to get a line under the header
 
 \subject{Biological Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
 \keywords{} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
-\university{\href{http://www.university.com}{University Name}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
+\university{\href{http://www.university.com}{The Interdisciplinary Center, Herzlia}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
 \department{\href{http://department.university.com}{Department or School Name}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
 \group{\href{http://researchgroup.university.com}{Research Group Name}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
 \faculty{\href{http://faculty.university.com}{Faculty Name}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
@@ -183,21 +184,122 @@ The acknowledgments and the people to thank go here, don't forget to include you
 % Uncomment the lines as you write the chapters
 
 \chapter{Introduction}
-\section{INTRODUCTION}
+
 \vspace{0.4cm}
 
-Neural networks have recently been shown to achieve outstanding performance in several machine learning domains such as image recognition \cite{krizhevsky2012imagenet}  and voice recognition~\cite{hinton2012deep}. Most of these breakthroughs have been achieved with convolutional neural networks (CNNs)~\cite{Lenet98}, but some promising results has also been demonstrated by using recurrent neural networks (RNNs) for tasks such as speech and handwriting recognition~\cite{graves2013speech, graves2008unconstrained}, usually when using the long short-term memory (LSTM) architecture ~\cite{LSTM_origin}.
 
+
+
+
+
+\textcolor{red}{What is P300? What does it mean P300 classification? What is RSVP?}
+\textcolor{red}{P300 based BCI - Why is it important?}
+\textcolor{red}{Why do we want to apply deep learning for BCI and especially RSVP P300}
+
+\textcolor{blue}{the following sentence explain what is the motivation of using deep learning for this method}
+
+Neural networks have recently been shown to achieve outstanding performance in several machine learning domains such as image recognition \cite{krizhevsky2012imagenet} and voice recognition ~\cite{hinton2012deep}. Most of these breakthroughs have been achieved with convolutional neural networks (CNNs)~\cite{Lenet98}, but some promising results has also been demonstrated by using recurrent neural networks (RNNs) for tasks such as speech and handwriting recognition~\cite{graves2013speech, graves2008unconstrained}, usually when using the long short-term memory (LSTM) architecture ~\cite{LSTM_origin}.
 
 There have been some studies on using ``deep neural networks'' for P300 classification \cite{P300_CNN, RSVP_P300_geva}. The results reported, despite some success, do not show the same dramatic progress achieved by `deep learning' methods as compared to the previous state of the art; while in areas such as image or voice recognition `deep' neural networks have resulted in classification accuracy exceeding other methods by far, this has not yet been the case with EEG in general and P300 detection specifically. The small number of samples typically available in neuroscience (or BCI) is most likely one of the main reasons. In addition, the high dimensionality of the EEG signal, the low signal to noise (SNR) and the existence of outliers in the data, pose other difficulties when trying to use neural networks for BCI tasks (see \cite{lotte2007review}). The main question in this research is whether the RNN model, and particularly LSTM, can enhance the accuracy of P300-based BCI systems and if so, under what conditions.
 
-
 \vspace{0.4cm}
-\section{BACKGROUND}
+\section{Background}
 \vspace{0.4cm}
-
 
 P300-based BCI systems can identify when a subject's attention is distracted toward a rare event by examining the subject's electroencephalogram (EEG) data. The first system that used the P300 effect was presented by~\cite{FirstP300} and since then different versions of P300 based BCI systems were suggested. One example of such a paradigm is the P300 rapid serial visual presentation (RSVP) speller. In this paradigm letters are presented one after the other in a random order, and the subject is asked to pay attention only to one of the letters called \textit{target} letter or \textit{target stimuli} (by counting them silently, for example). Whenever a subject pays attention to the target letter, a special waveform called P300 is expected to occur when a person's attention is distracted toward a rare event. It is called P300 since there is usually a peak in the EEG amplitude 300ms after the presentation of a target event. The advantage of the RSVP paradigm is that it does not require any eye movements, and can thus be operated by patients who have lost control of their eye gaze completely.
+
+\section{Deep Neural Networks - Overview}
+
+Although there is no single definition for Deep Learning, it can be defined as a branch of machine learning that focus on using Artificial Neural Networks (ANN). Deep Neural Network (DNN) is a network constructed from layers of ANN between the input and output. There are two main type of ANN architecture: Feed Forward Neural Networks(FFNN or FF) and Recurrent Neural Network(RNN). In FFNN directed cycle not allowed (i.e. data can flow only to the next layer)  while RNN architecture allows directed cycles within the network. The directed cycles in RNN allows the network to remember past event and make it suitable for sequence learning \cite{rumelhart1985learning}.
+
+
+
+\subsection{Layers Types}
+The architecture we propose is a combination of several types of ANN layers:
+
+\textbf{Fully Connect Layer - FC} - A layer where each neuron in the input connect to each neuron in the output is often called Fully Connected Layer or FC. In FC layer, the output will be obtained by the following equation:
+\[y=\sigma \left( {xW + b} \right)\]
+Where $x$ is the input vector, $W$ is a matrix that represent a linear mapping and $b$ is vector that reflect the transformation called the $bias$ ($b$ holds the value for each output unit). $\sigma \left( \cdot \right)$ represent an element-wise non-linearity such as ReLU, sigomid or TanH:
+
+\[{\rm{Relu}}\left( x \right) = \max \left( {x,0} \right)\,\,\,\,\,\,{\rm{sigmoid}}\left( x \right) = \frac{1}{{1 + {e^{ - x}}}}\,\,\,\,\,\,{\mathop{\rm Tan}\nolimits} {\rm{H}}\left( x \right) = \frac{{{e^x} - {e^{ - x}}}}{{{e^x} + {e^{ - z}}}}\]
+
+
+% TODO image of single layer perceptron
+
+
+ 
+ 
+ 
+ % TODO maybe deprecate the explanation only to 1D convoultion
+\textbf{Convolutional Neural Network Layer - CNN } The structure CNN utilize local correlation between neurons of adjacent layers. By activating a trainable kernel across the input layer, feature maps obtain a new set of feature maps. Fig.\ref{fig:LSTM_model} demonstrate 1D CNN. The red, blue and green colors represent the kernel trainable parameters across the input from layer $m-1$. The output equation of a 1D CNN layer is referred to each element of the output feature map: 
+$y\left( i \right) = \sigma \left( {W * x\left[ {i - k,...,i + k} \right] + b} \right)$
+If the kernel is 1D filter with a length of $k$ and the next layer has $M$ outputs, then $W$ is a matrix of size $M \times k$.
+
+\begin{figure*}[t]
+			\centering
+			\includegraphics{conv_1D_nn.png}
+			%	\end{center}
+			\label{fig:1D_CNN_layer}
+	\caption[1D CNN layer Schematic diagrams]{1D CNN layer Schematic diagrams.\footnote{Taken from http://deeplearning.net/tutorial/lenet.html}}
+\end{figure*}
+
+
+
+% back-propagation
+
+\textbf{Recurrent Neural Network Layer - RNN} - The simplest form of Recurrent Neural Network \cite{rumelhart1985learning, werbos1988generalization} is a layer where the output is connected to the input. Unlike FF layers, at each point in time, $y(t)$ - the result at time $t$ is a function of both the current input $x_t$ and the previous state: 
+$y(t-1)$:  
+	$y\left( t \right) = \sigma \left( {x\left( t \right)W + y\left( {t - 1} \right)U + b} \right)$
+
+
+Here, again $\sigma $ is a non-linear activation function. The structure of an RNN layer, allows the network to contain memory, since it has access to information from previous time-stamps. RNN is known to suffer from a  phenomenons called "vanishing gradient" and "exploding gradient" \cite{pascanu2013difficulty}: while training, the gradient of the loss function may not propagate to the first layers (i.e. layers closer to the input layer) or may have very large value (and by that will update the layer weight too much). \textcolor{red}{These} problem prevent learning long temporal dependencies (the full explanation is outside the scope of this report (See \cite{bengio1994learning}) .A common solution for these problem is called Long Short Term Memory layer.
+% things missing: LSTM, mention and maybe explain why RNN is so hard, unfolding
+
+%TODO - create my own image
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{LSTM_RNN_placeholder.png}
+\caption{TODO change the image}
+
+
+\label{fig:RNN-rolled}
+\end{figure}
+
+
+\textbf{Long Short Term Memory Layer - LSTM} - LSTM is a type of RNN with a special architecture designed to allow overcome RNN difficulties to learn long term dependencies. Each unit in an LSTM layer has two outputs:$y(t)$ - the main output and $c(t)$ - the unit's memory. LSTM uses an architecture with a set of "gates" in order to control the data flow and by that overcome the vanishing and exploding gradient mentioned above. LSTM equations:
+
+\[\begin{array}{l}
+f\left( t \right) = {\rm{sigmoid}}\left( {{W_f}x\left( t \right) + {U_f}y\left( {t - 1} \right) + {b_f}} \right)\\
+i\left( t \right) = {\rm{sigmoid}}\left( {{W_i}x\left( t \right) + {U_i}y\left( {t - 1} \right) + {b_i}} \right)\\
+o\left( t \right) = {\rm{sigmoid}}\left( {{W_o}x\left( t \right) + {U_o}y\left( {t - 1} \right) + {b_o}} \right)\\
+c\left( t \right) = f\left( t \right) \circ c\left( {t - 1} \right) + \tanh \left( {i\left( t \right) \circ {W_c}x\left( t \right) + {U_C}y\left( {t - 1} \right) + {b_c}} \right)\\
+y\left( t \right) = o\left( t \right) \circ \tanh \left( {c\left( t \right)} \right)
+\end{array}\]
+
+${W_{\left\{ {i,p,f,o} \right\}}}$ represent weights of the current state and  ${U_{\left\{ {i,p,f,o} \right\}}}$ represent weights of the previous states. 
+
+% TODO 1) formula 2) detailed explanation 3) figure
+
+
+\subsection{Training}
+\begin{itemize}
+	\item optimization
+	\item propagation - is it really needed?
+	\item SGD
+	\item RMSProp
+	\item What is the learning rate
+\end{itemize}
+\textcolor{red}{}
+
+
+\section{TODO}
+\begin{itemize}
+	\item algorithm long explanation
+\end{itemize}
+
+
+\section{Previous work}
+
 
 There are a lot of methods for building systems that can identify P300 signal for a BCI task. Blankertz et al.~\cite{P300_Tutorial} suggest to select the time interval with maximal separation between the target and non target samples, average their \textit{electro-potential} value and use shrinkage LDA to classify these features. Using this method has a drawback due to the low complexity of LDA model \cite{cincotti2003comparison}. The winner of the BCI competition III: dataset II used an ensemble of support vector machines (SVM) \cite{P300SVMWinner}, and other methods include hidden Markov model, k-nearest neighbours, and more  \cite{cincotti2003comparison}.
 
@@ -212,43 +314,86 @@ LSTM was already used for analysing EEG data for emotion detection \cite{soleyma
 
 
 
-\section{Deep Neural Networks - Overview}
-
-Although there is no single definition for Deep Learning, it can be defined as a branch of machine learning that focus on using Artificial Neural Networks (ANN). Deep Neural Network (DNN) is a network constructed from layers of ANN between the input and output. There are two main type of ANN architecture: Feed Forward Neural Networks(FFNN or FF) and Recurrent Neural Network(RNN). FF are network where the data flow only to the next layer in the network while RNN allows directed cycles within the network. The directed cycles in RNN allows the network to remember past event and make it suitable for sequence learning (4).
-
-
-
-\textbf{Fully Connect Layer - FC} - Simple form of ANN is a network with a single hidden layer often called Fully Connected Layer or FC. In FC layer, the output will be obtained by the following equation:
-\[y=\sigma \left( {xW + b} \right)\]
-Where $x$ is the input vector, $W$ is a matrix that represent a linear mapping and $b$ is vector that reflect the transformation called the $bias$ ($b$ holds the value for each output unit). $\sigma \left( \cdot \right)$ represent an element-wise non-linearity such as ReLU, sigomid or TanH:
-
-\[{\rm{Relu}}\left( x \right) = \max \left( {x,0} \right)\,\,\,\,\,\,{\rm{sigmoid}}\left( x \right) = \frac{1}{{1 + {e^{ - x}}}}\,\,\,\,\,\,{\mathop{\rm Tan}\nolimits} {\rm{H}}\left( x \right) = \frac{{{e^x} - {e^{ - x}}}}{{{e^x} + {e^{ - z}}}}\]
-
-
-
-
-
-
-\section{TODO}
-\begin{itemize}
-	\item algorithm long explanation
-\end{itemize}
-
 \chapter{MATERIALS AND METHODS}
 
 We compared the performance of LSTM based methods with other methods on a dataset from a RSVP P300 speller study~\cite{BlaknertzExperiment}. We used  average prediction across 10 trials to measure the P300 speller accuracy as applied in~\cite{BlaknertzExperiment}.
 
+
+
+
+\section{P300 speller experiments settings}
 The dataset includes 55 channels of EEG recordings from 11 subjects. Each subject is presented with 10 repetitions of 60 to 70 sets of 30 different letters and symbols. In total there are approximately 20,000 samples for each subject where 1/30 of them are supposed to contain a P300 wave. While the original experiment contains 3 different settings (interval of 116ms with/without colors and 83ms with color), we used the experiment setting of 116ms intervals with letters in different colors. For more detail, see \cite{BlaknertzExperiment}. 
 
+\textcolor{red}{TBD sketch of the experiment}
+
 In addition to the filters applied in~\cite{BlaknertzExperiment}, all models that we used share the same pre-processing stage of down-sampling the input frequency from 200Hz to 25 Hz. The result is that each learning sample is a matrix of 55 channels with 25 time samples each, or $55*25 = 1375$ features. Each sample thus covers exactly 1 second around the target event, at times [-200,800] ms.
+
+
+\subsection{Formulating the BCI task}
+In P300 speller the task is to identify to which letter a subject paid his attention to by identifying P300 pattern in the EEG. This can be done by finding a function $f(x)$ that when given an EEG sample – $x$, return the probability that P300 pattern are found in it. By identifying the EEG sample with the maximal $f(x)$ score among the EEG samples of all the different letters we can identify the target stimuli (i.e. the letter that the subject focuses on). In the following section, the explanation will focus only on identifying single letter and this for the sake of simplifying the explanation.
+
+\subsection{RSVP P300 speller trials}
+
+A \underline{\textit{trial}} is the presentation of all the character in an alphabet, one after the other, in a random order. In each trial, only one letter is the actual target stimuli.  
+
+The predicted character $\hat{c}$ in a single trial is computed by finding the character with maximal value of $f(x)$ among the group of all the letters ($C$):
+
+
+\begin{equation}
+\hat{c} = \arg \max \left\{ {f\left( {{x_{c}}} \right)} \right\}{  _{c \in C}}
+\end{equation}
+
+In order to achieve robust character recognition prediction ,a common approach is repeating each trial several time and average the prediction for each different stimuli .The group of all repetition of the same trial will be called $R$ . EEG recording where stimuli $c$ presented in trial $r$ is called $x_{c,r}$. The formula for predicting the target stimuli in $R$ attempts is:
+\begin{equation}
+\hat c = \arg \max \left\{ {\frac{1}{R}\sum\limits_{r \in R}^{} {f\left( {{x_{c,r}}} \right)} } \right\}{_{c \in C}}
+\end{equation}
+
+\paragraph{Notation reminder:}
+\begin{enumerate}
+	\item $f(x)$ is the P300 identification function
+	\item $X_c$ is an EEG sample data that was recorded when presented character $c$
+	\item $C$ is the set of all the available stimulus 
+	\item $\hat{c}$ is the predicted target stimuli (i.e. the letter the subject was suppose to focus on)
+	\item $c*$ is the true target stimuli (i.e. the letter the subject was suppose to focus on)	
+	\item $R$ Group of trial
+	\item $x_{c,r}$ is an EEG sample data that was recorded when presented character $c$ on trial $r$
+	
+\end{enumerate}
+
+\subsection{Loss function}
+In neural network, the network weights are updated by deriving the loss function with respected to the network weights. The error function for a single sample does not contain any information about the context of the dataset sample. In other words, if we train the neural network to identify P300 directly (as in \cite{P300_CNN}) the error, depends only on whether the sample contain P300. Here $y_{r,c}$ refer to the true label of sample $x_{r,c}$:
+\begin{equation}
+E = e\left( {f\left( {{x_{r,c}}} \right),{y_{r,c}}} \right)
+\end{equation} 
+
+In this paper we will refer to the binary log loss function:
+\begin{equation}\label{eq:binary_log_loss}
+e\left( {f\left( {{x_{r,c}}} \right),{y_{r,c}}} \right) =  - \left( {{y_{r,c}}\log \left( {f\left( {{x_{r,c}}} \right)} \right) - \left( {1 - {y_{r,c}}} \right)\log \left( {1 - f\left( {{x_{r,c}}} \right)} \right)} \right)
+\end{equation} 
+
+
+\subsubsection{Error of multiple samples}
+Most of the time, error in a neural network is calculated on multiple samples. In this, case the error is:
+\begin{equation}\label{eq:mini_batch_loss}
+E = \frac{1}{M}\sum\nolimits_i^M {e\left( {f\left( {{x_i},{y_i}} \right)} \right)}
+\end{equation}
+
+Here $M$ indicates the size of the batch of samples.
+
+
+
+
 
 The models evaluated in this experiment are:
 \begin{itemize}
 	\item LDA - A common method used in P300 classification for BCI is LDA \cite{BlaknertzExperiment,P300_Tutorial}. Here we will use a simplified version; unlike \cite{BlaknertzExperiment} we use all the timestamps as features, and we are using a non-shrinkage version of LDA.
+	% TODO detail explanation
 	
 	\item CNN (Fig.\ref{fig:CNN_model}) -- The CNN model we use is similar to the one used in \cite{P300_CNN}. The first layer is composed of 10  spatial filters, each of size $55*1$ -- the number of channels. The second layer contains 13 different temporal filters with size of $1*5$. Each one of the temporal filters processes 5 subsequent time stamps without overlapping. The third and fourth layers are simple fully connected layers followed by a single cell with sigmoid activation function that emits a scalar.
+	% TODO detailed figure showing the CNN architecture
 	
 	\item LSTM large/small (Fig.\ref{fig:LSTM_model}) -- LSTM large/small are both composed of single LSTM layers with 100 and 30 hidden cells in each, correspondingly. Both models end with a single cell with sigmoid activation layer that emits a scalar.
+	% TODO detailed figure showing the CNN architecture, showing a bad convergence graph?
 	
 	\item LSTM-CNN large/small Fig.\ref{fig:LSTM_model_CNN} -- The model has CNN as a first layer (the spatial domain layer) and LSTM as the second layer for the temporal domain. The first convolutional layer is the same as in the CNN model. Unlike the CNN model, the temporal layer is an LSTM layer with 100/30 hidden cells. The last layer contains a single cell a with sigmoid activation layer that emits a scalar.
 
@@ -307,9 +452,13 @@ For all the experiments, the different model were training using RMSProp~\cite{t
 
 RMSProp \cite{tieleman2012lecture} is a stochastic gradient descent(SGD) method. Unlike simple SGD, the method can adapt different learning rate for each parameter separately and use moving average across the past gradient in order to scale the per-feature it. We decided to use RMSProp since it is said to be robust and fast \cite{xu2015show, karpathy2015deep, szegedy2016rethinking}.
 
+
+\section{Implementation and Real Time Possible Usage}
+The code was implemented using Keras framework \cite{chollet2015keras}. Training was conducted using a 4-core i7 laptop with 16Gb RAM. Training took 110 seconds for small LSTM-CNN model and 24 seconds for the CNN model. The big difference in is due to the distributed nature of  CNN which allows much of the computation to be computed parallel. Predicting on single example takes about 0.6 milliseconds. In term of space, both models require less than 70kb of disk space.
+
+One of the advantages of using Deep Learning models is that they allow compressing knowledge from a lot of samples into a compact form. As we show in our experiments, it is possible to pre-train on multiple subjects and then fine tune it to a specific subjects calibration data. For example, training on 3000 calibration samples using the 4-core i7 laptop will take less than a minute (fine-tuning for 30 epochs). After the model is trained, using it for real-time prediction is feasible as well, since predicting each sample takes 0.6 milliseconds.
+
 \chapter{Results}
-
-
 
 Tab.\ref{table:AllAverageedResults} summarizes the results of the different experiments; all results are based on an average of 10 consecutive trials to detect the target letter, as in~\cite{BlaknertzExperiment}. The results for training and testing on the same subject (Tab.\ref{table:AccuracyPerSubject}) indicates that LSTM is inferior (82\%), and even the LSTM\_CNN combined model performs less than the the simple LDA method (86 and 93\% in the LSTM\_CNN models and 96\% using LDA) . A possible advantage for LSTM only becomes apparent with larger amounts of data -- when training and testing on all the subjects together (Tab.\ref{table:AllAverageedResults}). The large LSTM model performs poorly -- 77\%; we suspect it is due to the large number of trainable parameters -- 62501 (``over-fitting''); this is why we introduced CNN as a first layer and reduced number of hidden LSTM cells.
 
@@ -462,6 +611,17 @@ The results displayed in Fig.\ref{fig:CNNSaliencyMap2} and Fig.\ref{fig:LSTMCNNS
 	\label{fig:t}
 \end{figure*}
 
+
+
+\chapter{Future Direction}
+\begin{itemize}
+	\item more data across experiments and devices
+	\item augmenting the data
+	\item sequence to sequence somehow
+	\item incorporate more knowledge
+	\item explore the fine tuning methology
+\end{itemize}
+\textcolor{red}{TBD}
 
 
 
