@@ -81,10 +81,10 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 
 \thesistitle{TODO} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
-\supervisor{Dr. James \textsc{Smith}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
+\supervisor{Dr. Doron \textsc{Friedman}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{Doctor of Philosophy} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
-\author{John \textsc{Smith}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
+\author{Ori \textsc{Tal}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
 \addresses{} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
 
 \subject{Biological Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
@@ -636,6 +636,14 @@ The results displayed in Fig.\ref{fig:CNNSaliencyMap2} and Fig.\ref{fig:LSTMCNNS
 \chapter{Discussion}
 
 In this work we examined using LSTM neural networks for the task of the BCI task of P300 speller. Despite its temporal nature, no version of LSTM investigated in this work has shown a significant advantage compared to the CNN model suggested by \cite{P300_CNN}. We did see LSTM results improve with large amounts of data from multiple subjects, and superior results with a combined CNN-LSTM model; moreover, we have shown that this combined model is significantly more robust to temporal noise in the stimuli onset. We also show that the sensitivity of the LSTM based model is much more focused on the area between 250ms to 450ms than CNN based model. This sensitivity is correlated with what we know about the P300 ERP (a peak around 300ms after the stimuli onset). We thus believe that the smaller area of the sensitivity explains the robustness of the LSTM model to noise in the time domain, since it is less sensitive to the data outside the P300 phenomena.  
+
+
+\subsection{Future Direction}
+In our research we found that the effectiveness of deep learning  models can be seen as we increase our dataset size. Ideally we could use a big database with a lot of samples but this may be very expensive and impractical. A possible solution will be to gather existing recordings from different devices, experiments or even tasks. Another solution will be to explore different data augmentation Techniques. 
+
+In our experiment we used feed forward networks because the sample size had a fixed length. It interesting to see how training results if we will try train our model by trying tagging each time stamp and use sequence-to-sequence training (such as suggested by \cite{graves2012supervised}) where RNN has advantage over the feed forward models.
+Each sample in our experiment had a fixed length. This allowed us to use the feed forward models such as CNN. 
+
 
 
 
