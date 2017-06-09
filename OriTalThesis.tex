@@ -59,6 +59,7 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{color}
 \usepackage{float}
 \usepackage{amsmath}
+\usepackage{tabularx}
 
 \usepackage[autostyle=true]{csquotes}
 \graphicspath{ {Figures/} }
@@ -80,11 +81,12 @@ headsepline, % Uncomment to get a line under the header
 %	THESIS INFORMATION
 %----------------------------------------------------------------------------------------
 
-\thesistitle{TODO} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
-\supervisor{Dr. James \textsc{Smith}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
+\thesistitle{Using Recurrent Neural Networks for P300-based Brain-Computer Interface} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\supervisor{Dr. Doron \textsc{Friedman}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
-\degree{Doctor of Philosophy} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
-\author{John \textsc{Smith}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
+\degree{Master of Science (M.Sc.) Research Track
+	in Computer Science} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
+\author{Ori \textsc{Tal}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
 \addresses{} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
 
 \subject{Biological Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
@@ -199,16 +201,14 @@ P300-based BCI systems can identify when a subject's attention is distracted tow
 
 \section{Deep Neural Networks - Overview}
 
-Although there is no single definition for Deep Learning, it can be defined as a branch of machine learning that focus on using Artificial Neural Networks (ANN). Deep Neural Network (DNN) is a network constructed from layers of ANN between the input and output. There are two main type of ANN architecture: Feed Forward Neural Networks(FFNN or FF) and Recurrent Neural Network(RNN). In FFNN directed cycle not allowed (i.e. data can flow only to the next layer)  while RNN architecture allows directed cycles within the network. The directed cycles in RNN allows the network to remember past event and make it suitable for sequence learning \cite{rumelhart1985learning}.
-
-
+Although there is no single definition for Deep Learning, it can be defined as a branch of machine learning that focus on using Artificial Neural Networks (ANN). Deep Neural Network (DNN) is a network constructed from layers of ANN between the input and output. There are two main type of ANN architecture: Feed Forward Neural Networks (FFNN or FF) and Recurrent Neural Network(RNN). In FFNN directed cycle not allowed (i.e. data can flow only to the next layer)  while RNN architecture allows directed cycles within the network (i.e. data can flow also between 'Neurons' in the same layer). The directed cycles in RNN allows the network to remember past event and make it suitable for sequence learning \cite{rumelhart1985learning}.
 
 \subsection{Layers Types}
-The architecture we propose is a combination of several types of ANN layers:
+The architecture we propose is a combination of several ANN layers types described below:
 
-\textbf{Fully Connect Layer - FC} - A layer where each neuron in the input connect to each neuron in the output is often called Fully Connected Layer or FC. In FC layer, the output will be obtained by the following equation:
+\textbf{Fully Connect Layer - FC} - A layer where each neuron in the input is connected to each neuron in the output is often called Fully Connected Layer or FC. In FC layer, the output will be obtained by the following equation:
 \[y=\sigma \left( {xW + b} \right)\]
-Where $x$ is the input vector, $W$ is a matrix that represent a linear mapping and $b$ is vector that reflect the transformation called the $bias$ ($b$ holds the value for each output unit). $\sigma \left( \cdot \right)$ represent an element-wise non-linearity such as ReLU, sigomid or TanH:
+Where $x$ is the input vector, $W$ is a matrix that represent a linear mapping and $b$ is vector that reflects the transformation called the $bias$ ($b$ holds the value for each output unit). $\sigma \left( \cdot \right)$ represent an element-wise non-linearity such as ReLU, sigomid or TanH:
 
 \[{\rm{Relu}}\left( x \right) = \max \left( {x,0} \right)\,\,\,\,\,\,{\rm{sigmoid}}\left( x \right) = \frac{1}{{1 + {e^{ - x}}}}\,\,\,\,\,\,{\mathop{\rm Tan}\nolimits} {\rm{H}}\left( x \right) = \frac{{{e^x} - {e^{ - x}}}}{{{e^x} + {e^{ - z}}}}\]
 
@@ -220,9 +220,11 @@ Where $x$ is the input vector, $W$ is a matrix that represent a linear mapping a
  
  
  % TODO maybe deprecate the explanation only to 1D convoultion
-\textbf{Convolutional Neural Network Layer - CNN } The structure CNN utilize local correlation between neurons of adjacent layers. By activating a trainable kernel across the input layer, feature maps obtain a new set of feature maps. Fig.\ref{fig:LSTM_model} demonstrate 1D CNN. The red, blue and green colors represent the kernel trainable parameters across the input from layer $m-1$. The output equation of a 1D CNN layer is referred to each element of the output feature map: 
-$y\left( i \right) = \sigma \left( {W * x\left[ {i - k,...,i + k} \right] + b} \right)$
-If the kernel is 1D filter with a length of $k$ and the next layer has $M$ outputs, then $W$ is a matrix of size $M \times k$.
+\textbf{Convolutional Neural Network Layer - CNN } CNN is a layer that utilize local correlation between adjacent cells of the input layer. Since, unlike FC layer, the output can be of multiple dimension, we refer to the output as \textit{Feature Map}. The feature maps are obtained by activating trainable multi-dimension kernels across the input layer. Fig.\ref{fig:LSTM_model} is an example of 1D CNN. The red, blue and green colors represent the trainable kernel weights across the input - layer $m-1$. Equation \ref{eq:1} describe the output of element $i$ in a 1D CNN layer feature map: 
+\begin{equation} \label{eq:1}
+y\left( i \right) = \sigma \left( {W * x\left[ {i - k,...,i + k} \right] + b} \right)
+\end{equation}
+If the kernel is 1D filter with a length of $k$ and the next layer has $M$ outputs, then $W$ is a matrix of size $M \times k$. 
 
 \begin{figure*}[t]
 			\centering
@@ -385,15 +387,11 @@ E = \frac{1}{M}\sum\nolimits_i^M {e\left( {f\left( {{x_i},{y_i}} \right)} \right
 \end{equation}
 
 Here $M$ indicates the size of the batch of samples.
-
-
-
-
-
+\subsection{Classification Models}
 The models evaluated in this experiment are:
 \begin{itemize}
 	\item LDA - A common method used in P300 classification for BCI is LDA \cite{BlaknertzExperiment,P300_Tutorial}. Here we will use a simplified version; unlike \cite{BlaknertzExperiment} we use all the timestamps as features, and we are using a non-shrinkage version of LDA.
-	% TODO detail explanation
+
 	
 	\item CNN (Fig.\ref{fig:CNN_model}) -- The CNN model we use is similar to the one used in \cite{P300_CNN}. The first layer is composed of 10  spatial filters, each of size $55*1$ -- the number of channels. The second layer contains 13 different temporal filters with size of $1*5$. Each one of the temporal filters processes 5 subsequent time stamps without overlapping. The third and fourth layers are simple fully connected layers followed by a single cell with sigmoid activation function that emits a scalar.
 	% TODO detailed figure showing the CNN architecture
@@ -460,10 +458,7 @@ For all the experiments, the different model were training using RMSProp~\cite{t
 RMSProp \cite{tieleman2012lecture} is a stochastic gradient descent(SGD) method. Unlike simple SGD, the method can adapt different learning rate for each parameter separately and use moving average across the past gradient in order to scale the learning rate per-feature. We decided to use RMSProp since it is said to be robust and fast \cite{xu2015show, karpathy2015deep, szegedy2016rethinking}.
 
 
-\section{Implementation and Real Time Possible Usage}
-The code was implemented using Keras framework \cite{chollet2015keras}. Training was conducted using a 4-core i7 laptop with 16Gb RAM. Training took 110 seconds for small LSTM-CNN model and 24 seconds for the CNN model. The big difference in is due to the distributed nature of  CNN which allows much of the computation to be computed parallel. Predicting on single example takes about 0.6 milliseconds. In term of space, both models require less than 70kb of disk space.
 
-One of the advantages of using Deep Learning models is that they allow compressing knowledge from a lot of samples into a compact form. As we show in our experiments, it is possible to pre-train on multiple subjects and then fine tune it to a specific subjects calibration data. For example, training on 3000 calibration samples using the 4-core i7 laptop will take less than a minute (fine-tuning for 30 epochs). After the model is trained, using it for real-time prediction is feasible as well, since predicting each sample takes 0.6 milliseconds.
 
 \chapter{Results}
 
@@ -500,7 +495,7 @@ Tab.\ref{table:AccuracyPerSubject} summarizes the results per single subject. Wh
 	\label{table:AccuracyPerSubject}	
 	\begin{tabular}{l|ccccccc}
 		\toprule
-		{subject} &   LDA &   LSTM large &  LSTM-CNN large &   CNN &  LSTM small& LSTM-CNN small \\
+		{subject} &   LDA &   \makecell{LSTM\\large} &  \makecell{LSTM-CNN\\large}&   CNN &  LSTM & \makecell{LSTM-CNN\\small}\\
 		\midrule
 		fat     &  1.00 &  0.98 &      0.98 &  0.98 &        1.00 &            0.95 \\
 		gcb     &  0.91 &  0.82 &      0.88 &  0.92 &        0.74 &            0.75 \\
@@ -525,9 +520,10 @@ In the second stage, we continue training the model on the rest $3/4$ of the \te
 	\centering
 	\captionof{table}{Accuracy when training and testing on different subjects. }
 	\label{table:AllExceptOne}	
-	\begin{tabular}{l|ccccc}
+
+	\begin{tabular*}{1.1\linewidth}{@{\extracolsep{\fill}}l|ccccc}
 		\toprule
-		{subject} & \makecell{LDA \\ all except one} &  \makecell{CNN\\all except one}&  \makecell{CNN\\all except one\\fine tune}& \makecell{SMALL LSTM-CNN\\all except one}&\makecell{SMALL LSTM-CNN\\all except one \\ fine tune} \\
+		{subject} & \makecell{LDA \\ all except one} &  \makecell{CNN\\all except one}&  \makecell{CNN\\all except one\\fine tune}& \makecell{LSTM-CNN\\SMALL\\all except one}&\makecell{LSTM-CNN\\SMALL\\all except one \\ fine tune} \\
 		\midrule
 		fat     &                  0.94 &                  1.00 &                            1.00 &                             0.98 &                                               1.00 \\
 		gcb     &                  0.43 &                  0.83 &                            0.91 &                             0.86 &                                               0.92 \\
@@ -542,7 +538,7 @@ In the second stage, we continue training the model on the rest $3/4$ of the \te
 		pia     &                  0.77 &                  0.87 &                            0.96 &                             0.91 &                                               0.97 \\
 		mean    &                  0.65 &                  0.84 &                            0.97 &                             0.84 &                                               0.97 \\
 		\bottomrule
-	\end{tabular}
+	\end{tabular*}
 \end{table*}
 
 \vspace{5mm}
@@ -619,8 +615,16 @@ The results displayed in Fig.\ref{fig:CNNSaliencyMap2} and Fig.\ref{fig:LSTMCNNS
 \end{figure*}
 
 
+\section{Implementation and Real Time Possible Usage}
+The code was implemented using Keras framework \cite{chollet2015keras}. Training was conducted using a 4-core i7 laptop with 16Gb RAM. Training took 110 seconds for small LSTM-CNN model and 24 seconds for the CNN model. The big difference in is due to the distributed nature of  CNN which allows much of the computation to be computed parallel. Predicting on single example takes about 0.6 milliseconds. In term of space, both models require less than 70kb of disk space.
+
+One of the advantages of using Deep Learning models is that they allow compressing knowledge from a lot of samples into a compact form. As we show in our experiments, it is possible to pre-train on multiple subjects and then fine tune it to a specific subjects calibration data. For example, training on 3000 calibration samples using the 4-core i7 laptop will take less than a minute (fine-tuning for 30 epochs). After the model is trained, using it for real-time prediction is feasible as well, since predicting each sample takes 0.6 milliseconds.
+
 
 \chapter{Future Direction}
+
+
+
 \begin{itemize}
 	\item more data across experiments and devices
 	\item augmenting the data
@@ -633,9 +637,14 @@ The results displayed in Fig.\ref{fig:CNNSaliencyMap2} and Fig.\ref{fig:LSTMCNNS
 
 
 
-\chapter{Discussion}
+\chapter{Discussion and Future Direction}
 
-In this work we examined using LSTM neural networks for the task of the BCI task of P300 speller. Despite its temporal nature, no version of LSTM investigated in this work has shown a significant advantage compared to the CNN model suggested by \cite{P300_CNN}. We did see LSTM results improve with large amounts of data from multiple subjects, and superior results with a combined CNN-LSTM model; moreover, we have shown that this combined model is significantly more robust to temporal noise in the stimuli onset. We also show that the sensitivity of the LSTM based model is much more focused on the area between 250ms to 450ms than CNN based model. This sensitivity is correlated with what we know about the P300 ERP (a peak around 300ms after the stimuli onset). We thus believe that the smaller area of the sensitivity explains the robustness of the LSTM model to noise in the time domain, since it is less sensitive to the data outside the P300 phenomena.  
+In this work we examined using LSTM neural networks for the task of the BCI task of P300 speller. Despite its temporal nature, no version of LSTM investigated in this work has shown a significant advantage compared to the CNN model suggested by \cite{P300_CNN}. We did see LSTM results improve with large amounts of data from multiple subjects, and superior results with a combined CNN-LSTM model; moreover, we have shown that this combined model is significantly more robust to temporal noise in the stimuli onset. We also show that the sensitivity of the LSTM based model is much more focused on the area between 250ms to 450ms than CNN based model. This sensitivity is correlated with what we know about the P300 ERP (a peak around 300ms after the stimuli onset). We thus believe that the smaller area of the sensitivity explains the robustness of the LSTM model to noise in the time domain, since it is less sensitive to the data outside the P300 phenomena. 
+
+
+
+
+ 
 
 
 
