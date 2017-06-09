@@ -60,6 +60,7 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{tabularx}
+\usepackage{scrextend}
 
 \usepackage[autostyle=true]{csquotes}
 \graphicspath{ {Figures/} }
@@ -203,8 +204,8 @@ P300-based BCI systems can identify when a subject's attention is distracted tow
 
 Although there is no single definition for Deep Learning, it can be defined as a branch of machine learning that focus on using Artificial Neural Networks (ANN). Deep Neural Network (DNN) is a network constructed from layers of ANN between the input and output. There are two main type of ANN architecture: Feed Forward Neural Networks (FFNN or FF) and Recurrent Neural Network(RNN). In FFNN directed cycle not allowed (i.e. data can flow only to the next layer)  while RNN architecture allows directed cycles within the network (i.e. data can flow also between 'Neurons' in the same layer). The directed cycles in RNN allows the network to remember past event and make it suitable for sequence learning \cite{rumelhart1985learning}.
 
-\subsection{Layers Types}
-The architecture we propose is a combination of several ANN layers types described below:
+\subsection{Layer Types}
+The architecture we propose is a combination of several ANN layer types described below:
 
 \textbf{Fully Connect Layer - FC} - A layer where each neuron in the input is connected to each neuron in the output is often called Fully Connected Layer or FC. In FC layer, the output will be obtained by the following equation:
 \[y=\sigma \left( {xW + b} \right)\]
@@ -212,33 +213,27 @@ Where $x$ is the input vector, $W$ is a matrix that represent a linear mapping a
 
 \[{\rm{Relu}}\left( x \right) = \max \left( {x,0} \right)\,\,\,\,\,\,{\rm{sigmoid}}\left( x \right) = \frac{1}{{1 + {e^{ - x}}}}\,\,\,\,\,\,{\mathop{\rm Tan}\nolimits} {\rm{H}}\left( x \right) = \frac{{{e^x} - {e^{ - x}}}}{{{e^x} + {e^{ - z}}}}\]
 
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{Figures/FF_Example}
+\caption{Example of simple Feed-Forward network with one hidden layer}
+\label{fig:FF_Example}
+\end{figure}
 
-% TODO image of single layer perceptron
-
-
- 
- 
- 
- % TODO maybe deprecate the explanation only to 1D convoultion
-\textbf{Convolutional Neural Network Layer - CNN } CNN is a layer that utilize local correlation between adjacent cells of the input layer. Since, unlike FC layer, the output can be of multiple dimension, we refer to the output as \textit{Feature Map}. The feature maps are obtained by activating trainable multi-dimension kernels across the input layer. Fig.\ref{fig:LSTM_model} is an example of 1D CNN. The red, blue and green colors represent the trainable kernel weights across the input - layer $m-1$. Equation \ref{eq:1} describe the output of element $i$ in a 1D CNN layer feature map:
+\textbf{Convolutional Neural Network Layer - CNN } CNN is a layer that utilize local correlation between adjacent cells of the input layer. Since, unlike FC layer, the output can be of multiple dimension, we refer to the output as \textit{Feature Map}. The feature maps are obtained by activating trainable multi-dimension kernels across the input layer. Fig.\ref{fig:CNN_Example} is an example of 1D CNN. The red, blue and green colors represent the trainable kernel weights ($w1$)across the input - layer $m-1$. Equation \ref{eq:1} describe the output of element $i$ in a 1D CNN layer feature map:
 \begin{equation} \label{eq:1}
 y\left( i \right) = \sigma \left( {W * x\left[ {i - k,...,i + k} \right] + b} \right)
 \end{equation}
 If the kernel is 1D filter with a length of $k$ and the next layer has $M$ outputs, then $W$ is a matrix of size $M \times k$.
 
-\begin{figure*}[t]
+\begin{figure}[t]
 			\centering
-			\includegraphics{conv_1D_nn.png}
-			%	\end{center}
-			\label{fig:1D_CNN_layer}
-	\caption[1D CNN layer Schematic diagrams]{1D CNN layer Schematic diagrams.\footnote{Taken from http://deeplearning.net/tutorial/lenet.html}}
-\end{figure*}
+			\includegraphics{CNN_Example.png}
+			\caption[1D CNN layer Schematic diagrams]{1D CNN layer Schematic diagrams}
+			\label{fig:CNN_Example}
+\end{figure}
 
-
-
-% back-propagation
-
-\textbf{Recurrent Neural Network Layer - RNN} - The simplest form of Recurrent Neural Network \cite{rumelhart1985learning, werbos1988generalization} is a layer where the output is connected to the input. Unlike FF layers, at each point in time, $y(t)$ - the result at time $t$ is a function of both the current input $x_t$ and the previous state: 
+\textbf{Recurrent Neural Network Layer - RNN} - The simplest form of Recurrent Neural Network \cite{rumelhart1985learning, werbos1988generalization} is a layer where the output is connected to the input. Unlike FF layers, in RNN, the result at time $t$ ($y(t)$) is a function of both the current input $x_t$ and the previous state: 
 $y(t-1)$:  
 	$y\left( t \right) = \sigma \left( {x\left( t \right)W + y\left( {t - 1} \right)U + b} \right)$
 
@@ -247,17 +242,24 @@ Here, again $\sigma $ is a non-linear activation function. The structure of an R
 % things missing: LSTM, mention and maybe explain why RNN is so hard, unfolding
 
 %TODO - create my own image
+
+
 \begin{figure}
-\centering
-\includegraphics[width=1.0\linewidth]{LSTM_RNN_placeholder_clear.png}
-\caption{Detailed schematic of the Simple Recurrent Network unit (left) and a Long Short-Term Memory block (right) as used
-	in the hidden layers of a recurrent neural network. Taken from \cite{ greff2017lstm}}
-
-
-\label{fig:RNN-rolled}
+	\centering
+	\includegraphics[width=0.7\linewidth]{Figures/RNN_Example}
+	\caption{Example of simple Recurrent Neural Network with one hidden layer}
+	\label{fig:RNN_Example}
 \end{figure}
 
-
+\begin{figure}
+	\centering
+	\includegraphics[width=1.0\linewidth]{LSTM_RNN_placeholder_clear.png}
+	\caption{Detailed schematic of the Simple Recurrent Network unit (left) and a Long Short-Term Memory block (right) as used
+		in the hidden layers of a recurrent neural network. Taken from \cite{ greff2017lstm}}
+	
+	
+	\label{fig:RNN-rolled}
+\end{figure}
 \textbf{Long Short Term Memory Layer - LSTM} - LSTM is a type of RNN with a special architecture designed to allow overcome RNN difficulties to learn long term dependencies. Each unit in an LSTM layer has two outputs:$y(t)$ - the main output and $c(t)$ - the unit's memory. LSTM uses an architecture with a set of "gates" in order to control the data flow and by that overcome the vanishing and exploding gradient mentioned above. LSTM equations:
 
 \[\begin{array}{l}
@@ -270,47 +272,12 @@ y\left( t \right) = o\left( t \right) \circ \tanh \left( {c\left( t \right)} \ri
 
 ${W_{\left\{ {i,p,f,o} \right\}}}$ represent weights of the current state and  ${U_{\left\{ {i,p,f,o} \right\}}}$ represent weights of the previous states. 
 
-\begin{figure}
-\centering
-\includegraphics[width=1.1\linewidth]{Figures/LSTM_CNN_detailed}
-\caption{The CNN model used in our research. Note that all the connections are directed toward the next layer.}
-\label{fig:LSTM_CNN_detailed}
-\end{figure}
-
-
-\begin{figure}
-\centering
-\includegraphics[width=1.1\linewidth]{Figures/LSTM_CNN_detailed}
-\caption{The CNN-LSTM model used in our experiments. Note that unlike the CNN model, there are connection between cells from the same layer. This inter-layer connection allows the network to model the dynamic of the signal}
-\label{fig:LSTM_CNN_detailed}
-\end{figure}
 
 
 
 
-% TODO 1) formula 2) detailed explanation 3) figure
 
-
-\subsection{Training}
-\begin{itemize}
-	\item optimization
-	\item propagation - is it really needed?
-	\item SGD
-	\item RMSProp
-	\item What is the learning rate
-\end{itemize}
-\textcolor{red}{}
-
-
-\section{TODO}
-\begin{itemize}
-	\item algorithm long explanation
-\end{itemize}
-
-
-\section{Previous work}
-
-
+\chapter{Previous work}
 There are a lot of methods for building systems that can identify P300 signal for a BCI task. Blankertz et al.~\cite{P300_Tutorial} suggest to select the time interval with maximal separation between the target and non target samples, average their \textit{electro-potential} value and use shrinkage LDA to classify these features. Using this method has a drawback due to the low complexity of LDA model \cite{cincotti2003comparison}. The winner of the BCI competition III: dataset II used an ensemble of support vector machines (SVM) \cite{P300SVMWinner}, and other methods include hidden Markov model, k-nearest neighbours, and more  \cite{cincotti2003comparison}.
 
 More recently, given the success of `deep' neural networks \cite{krizhevsky2012imagenet}, there have been several attempts to apply `deep learning' for BCI related tasks. Cecotti and Graser~\cite{P300_CNN} were the first to use CNNs  for P300 speller. In their work, they train an ensemble of CNN-based P300 classifiers to identify the existence of P300. Manor and Geva~\cite{RSVP_P300_geva} used CNN for the RSVP P300 classification task and suggested a new spatio-temporal regularization which have shown improvement in the performance.
@@ -336,7 +303,6 @@ The dataset includes 55 channels of EEG recordings from 11 subjects. Each subjec
 
 In addition to the filters applied in~\cite{BlaknertzExperiment}, all models that we used share the same pre-processing stage of down-sampling the input frequency from 200Hz to 25 Hz. The result is that each learning sample is a matrix of 55 channels with 25 time samples each, or $55*25 = 1375$ features. Each sample thus covers exactly 1 second around the target event, at times [-200,800] ms.
 
-
 \subsection{Formulating the BCI task}
 In P300 speller the task is to identify to which letter a subject paid his attention to by identifying P300 pattern in the EEG. This can be done by finding a function $f(x)$ that when given an EEG sample – $x$, return the probability that P300 pattern are found in it. By identifying the EEG sample with the maximal $f(x)$ score among the EEG samples of all the different letters we can identify the target stimuli (i.e. the letter that the subject focuses on). In the following section, the explanation will focus only on identifying single letter and this for the sake of simplifying the explanation.
 
@@ -356,17 +322,17 @@ In order to achieve robust character recognition prediction ,a common approach i
 \hat c = \arg \max \left\{ {\frac{1}{R}\sum\limits_{r \in R}^{} {f\left( {{x_{c,r}}} \right)} } \right\}{_{c \in C}}
 \end{equation}
 
+
 \paragraph{Notation reminder:}
-\begin{enumerate}
-	\item $f(x)$ is the P300 identification function
-	\item $X_c$ is an EEG sample data that was recorded when presented character $c$
-	\item $C$ is the set of all the available stimulus 
-	\item $\hat{c}$ is the predicted target stimuli (i.e. the letter the subject was suppose to focus on)
-	\item $c*$ is the true target stimuli (i.e. the letter the subject was suppose to focus on)	
-	\item $R$ Group of trial
-	\item $x_{c,r}$ is an EEG sample data that was recorded when presented character $c$ on trial $r$
-	
-\end{enumerate}
+\begin{labeling}{notation}
+\item [$f(x)$] P300 identification function
+\item [$X_c$] An EEG sample data that was recorded when presented character $c$
+\item [$C$] The set of all the available stimulus 
+\item [$\hat{c}$] The predicted target stimuli (i.e. the letter the subject was suppose to focus on)
+\item [$c*$] The true target stimuli (i.e. the letter the subject was suppose to focus on)	
+\item [$R$] Group of trial
+\item [$x_{c,r}$] An EEG sample data that was recorded when presented character $c$ on trial $r$
+\end{labeling}
 
 \subsection{Loss function}
 In neural network, the network weights are updated by deriving the loss function with respected to the network weights. The error function for a single sample does not contain any information about the context of the dataset sample. In other words, if we train the neural network to identify P300 directly (as in \cite{P300_CNN}) the error, depends only on whether the sample contain P300. Here $y_{r,c}$ refer to the true label of sample $x_{r,c}$:
@@ -374,7 +340,7 @@ In neural network, the network weights are updated by deriving the loss function
 E = e\left( {f\left( {{x_{r,c}}} \right),{y_{r,c}}} \right)
 \end{equation} 
 
-In this paper we will refer to the binary log loss function:
+In this research we use to the binary log loss function:
 \begin{equation}\label{eq:binary_log_loss}
 e\left( {f\left( {{x_{r,c}}} \right),{y_{r,c}}} \right) =  - \left( {{y_{r,c}}\log \left( {f\left( {{x_{r,c}}} \right)} \right) - \left( {1 - {y_{r,c}}} \right)\log \left( {1 - f\left( {{x_{r,c}}} \right)} \right)} \right)
 \end{equation} 
@@ -457,6 +423,22 @@ For all the experiments, the different model were training using RMSProp~\cite{t
 
 RMSProp \cite{tieleman2012lecture} is a stochastic gradient descent(SGD) method. Unlike simple SGD, the method can adapt different learning rate for each parameter separately and use moving average across the past gradient in order to scale the learning rate per-feature. We decided to use RMSProp since it is said to be robust and fast \cite{xu2015show, karpathy2015deep, szegedy2016rethinking}.
 
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1.1\linewidth]{Figures/CNN_detailed}
+	\caption{The CNN model used in our research. Note that all the connections are directed toward the next layer.}
+	\label{fig:CNN_detailed}
+\end{figure}
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1.1\linewidth]{Figures/LSTM_CNN_detailed}
+	\caption{The CNN-LSTM model used in our experiments. Note that unlike the CNN model, there are connection between cells from the same layer. This inter-layer connection allows the network to model the dynamic of the signal}
+	\label{fig:LSTM_CNN_detailed}
+\end{figure}
 
 \section{Implementation and Real Time Possible Usage}
 The code was implemented using Keras framework \cite{chollet2015keras}. Training was conducted using a 4-core i7 laptop with 16Gb RAM. Training took 110 seconds for small LSTM-CNN model and 24 seconds for the CNN model. The big difference in is due to the distributed nature of  CNN which allows much of the computation to be computed parallel. Predicting on single example takes about 0.6 milliseconds. In term of space, both models require less than 70kb of disk space.
