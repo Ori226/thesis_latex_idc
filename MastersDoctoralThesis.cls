@@ -215,6 +215,7 @@
 \DeclareDocumentCommand { \author     } { m } { \DeclareDocumentCommand    { \authorname } { } {#1}
 \DeclareDocumentCommand { \@author    } {   } {#1}   }
 \NewDocumentCommand     { \supervisor } { m } { \DeclareDocumentCommand { \supname       } { } {#1}  }
+\NewDocumentCommand     { \advisor 	  } { m } { \DeclareDocumentCommand { \supname       } { } {#1}  }
 \NewDocumentCommand     { \examiner   } { m } { \DeclareDocumentCommand { \examname      } { } {#1}  }
 \NewDocumentCommand     { \degree     } { m } { \DeclareDocumentCommand { \degreename    } { } {#1}  }
 \NewDocumentCommand     { \addresses  } { m } { \DeclareDocumentCommand { \addressname   } { } {#1}  }
