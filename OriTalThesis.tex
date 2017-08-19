@@ -93,9 +93,9 @@ headsepline, % Uncomment to get a line under the header
 \subject{Biological Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
 \keywords{} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
 \university{\href{http://www.university.com}{The Interdisciplinary Center, Herzlia}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
-\department{\href{http://department.university.com}{Department or School Name}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
+\department{\href{http://department.university.com}{Computer science}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
 \group{\href{http://researchgroup.university.com}{Research Group Name}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
-\faculty{\href{http://faculty.university.com}{Faculty Name}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
+\faculty{\href{https://www.idc.ac.il/he/schools/cs/pages/home.aspx}{Efi Arazi School of Computer Science}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
 
 \AtBeginDocument{
 \hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
@@ -139,8 +139,7 @@ headsepline, % Uncomment to get a line under the header
 
 
 \large \textit{A thesis submitted in fulfillment of the requirements\\ for the degree of \degreename}\\[0.3cm] % University requirement text
-\textit{in the}\\[0.4cm]
-\groupname\\\deptname\\[2cm] % Research group name and department name
+
  
 \vfill
 
@@ -193,7 +192,7 @@ I wish to express my sincere thanks to Dr.Doron Friedman who support me and gave
 \vspace{0.4cm}
 
 
-\textit{This thesis is based on an article which will be presented in the 7th Graz brain-computer interface conference. While the article focused in describing our results, in this report we added a detail explanation about the method we were using in our experiments.}
+\textit{This thesis is based on an article which will be presented in the 7th Graz brain-computer interface conference. While the article  is focused in describing our results, in this report we added a more detailed explanation about the method we were using in our experiments.}
 
 Neural networks have recently been shown to achieve outstanding performance in several machine learning domains such as image recognition \cite{krizhevsky2012imagenet} and voice recognition ~\cite{hinton2012deep}. Most of these breakthroughs have been achieved with convolutional neural networks (CNNs)~\cite{Lenet98}, but some promising results has also been demonstrated by using recurrent neural networks (RNNs) for tasks such as speech and handwriting recognition~\cite{graves2013speech, graves2008unconstrained}, usually when using the long short-term memory (LSTM) architecture ~\cite{LSTM_origin}.
 
@@ -350,11 +349,11 @@ The models evaluated in this experiment are:
 \begin{itemize}
 	\item LDA - A common method used in P300 classification for BCI is linear discriminative analysis -LDA \cite{BlaknertzExperiment,P300_Tutorial}. Here we will use a simplified version; unlike \cite{BlaknertzExperiment} we use all the timestamps as features, and we use a non-shrinkage version of LDA.
 	
-	\item CNN (Fig.\ref{fig:CNN_model}) -- The CNN model we use is similar to the one used in \cite{P300_CNN}. The first layer is composed of 10  spatial filters, each of size $55*1$ -- the number of channels. The second layer contains 13 different temporal filters with size of $1*5$. Each one of the temporal filters processes 5 subsequent time stamps without overlapping. The third and fourth layers are simple fully connected layers followed by a single cell with a sigmoid activation function that emits a scalar.
+	\item CNN (Fig.\ref{fig:CNN_model} and Fig.\ref{fig:CNN_detailed}) -- The CNN model we use is similar to the one used in \cite{P300_CNN}. The first layer is composed of 10  spatial filters, each of size $55*1$ -- the number of channels. The second layer contains 13 different temporal filters with size of $1*5$. Each one of the temporal filters processes 5 subsequent time stamps without overlapping. The third and fourth layers are simple fully connected layers followed by a single cell with a sigmoid activation function that emits a scalar.
 	
 	\item LSTM large/small (Fig.\ref{fig:LSTM_model}) -- LSTM large/small are both composed of single LSTM layers with 100 and 30 hidden cells in each, correspondingly. Both models end with a single cell with a sigmoid activation layer that emits a scalar.
 	
-	\item LSTM-CNN large/small (Fig.\ref{fig:LSTM_model_CNN}) -- The model has CNN as a first layer (the spatial domain layer) and LSTM as the second layer for the temporal domain. The first convolutional layer is the same as in the CNN model. Unlike the CNN model, the temporal layer is an LSTM layer with 100/30 hidden cells. The last layer contains a single cell a with a sigmoid activation layer that emits a scalar.
+	\item LSTM-CNN large/small (Fig.\ref{fig:LSTM_model_CNN} and Fig.\ref{fig:LSTM_CNN_detailed}) -- The model has CNN as a first layer (the spatial domain layer) and LSTM as the second layer for the temporal domain. The first convolutional layer is the same as in the CNN model. Unlike the CNN model, the temporal layer is an LSTM layer with 100/30 hidden cells. The last layer contains a single cell a with a sigmoid activation layer that emits a scalar.
 
 \end{itemize}
 
@@ -414,20 +413,24 @@ RMSProp \cite{tieleman2012lecture} is a stochastic gradient descent (SGD) method
 
 
 
-\begin{figure}
+\begin{figure*}
 	\centering
+	\begin{subfigure}[t]{1.0\textwidth}
+			\centering
 	\includegraphics[width=1.1\linewidth]{Figures/CNN_detailed}
 	\caption{The CNN model used in our research. Note that all the connections are directed toward the next layer.}
 	\label{fig:CNN_detailed}
-\end{figure}
+	\end{subfigure}
+	\begin{subfigure}[t]{1.0\textwidth}
+		\centering
+		\includegraphics[width=1.1\linewidth]{Figures/LSTM_CNN_detailed}
+		\caption{The CNN-LSTM model used in our experiments. Note that unlike the CNN model, there are connections between cells from the same layer. The inter-layer connection allows the network to model the `.}
+		\label{fig:LSTM_CNN_detailed}
+	\end{subfigure}
 
+	\caption{Additional Illustration showing the main difference between CNN and LSTM-CNN architecture.}
+\end{figure*}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=1.1\linewidth]{Figures/LSTM_CNN_detailed}
-	\caption{The CNN-LSTM model used in our experiments. Note that unlike the CNN model, there are connections between cells from the same layer. The inter-layer connection allows the network to model the `.}
-	\label{fig:LSTM_CNN_detailed}
-\end{figure}
 
 \section{Implementation Details}
 The code was implemented using the Keras framework \cite{chollet2015keras}. Training was conducted using a 4-core i7 laptop with 16Gb RAM. Training took 110 seconds on 192000 samples for the small LSTM-CNN model and 24 seconds for the CNN model. The big difference in is due to the distributed nature of  CNN which allows much of the computation to be computed parallel. Predicting on a single example takes about 0.6 milliseconds. In term of space, both models require less than 70kb of disk space.
@@ -600,7 +603,7 @@ In our experiment we used feed forward networks because the sample size had a fi
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
-\renewcommand{\bibsection}{\section{References}}
+\renewcommand{\bibsection}{\chapter{References}}
 
 
 \bibliography{bci_conf}
