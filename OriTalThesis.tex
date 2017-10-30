@@ -64,6 +64,7 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage[autostyle=true]{csquotes}
 \graphicspath{ {Figures/} }
+\captionsetup[table]{position=bottom} 
 %----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
 %----------------------------------------------------------------------------------------
@@ -200,11 +201,11 @@ Neural networks have recently been shown to achieve outstanding performance in s
 
 There have been some studies using 'deep neural networks' for P300 classification \cite{P300_CNN, RSVP_P300_geva}. The results reported, despite some success, do not show the same dramatic progress achieved by 'deep learning' methods as compared to the previous state of the art; while in areas such as image or voice recognition `deep' neural networks have resulted in classification accuracy exceeding other methods by far, this has not yet been the case with EEG in general and in P300 detection specifically. The small number of samples typically available in neuroscience (or brain computer interface - BCI) is most likely one of the main reasons for theses results. In addition, the high dimensionality of the EEG signal, the low signal to noise (SNR) and the existence of outliers in the data, pose other difficulties when trying to use neural networks for BCI tasks (see \cite{lotte2007review}). The main question in this research is whether the RNN model, and particularly LSTM, can enhance the accuracy of P300-based BCI systems and if so, under what conditions.
 
-P300-based BCI systems rely on identifying the times when a subject is required to pay attention toward a rare event, by examining the subject's electroencephalogram (EEG) data. The first system that used the P300 effect in BCI was presented by Farwell, and Donchin \cite{FirstP300} and since then different versions of P300 based BCI systems were suggested. One example of such a paradigm is the P300 rapid serial visual presentation (RSVP) speller. In this paradigm letters are presented one after the other in a random order, and the subject is asked to pay attention only to one of the letters called \textit{target} letter or \textit{target stimuli} (by counting them silently, for example). Whenever a subject pays attention to the target letter, a special waveform called P300 is expected to occur. It is called P300 since there is usually a peak in the EEG amplitude 300ms after the presentation of a target event. The advantage of the RSVP paradigm is that it does not require any eye movements, and can thus be operated by patients who have lost control of their eye gaze completely.
+P300-based BCI systems rely on identifying the times when a subject is required to pay attention toward a rare event, by examining the subject's electroencephalogram (EEG) data. The first BCI system that used the P300 effect was presented by Farwell, and Donchin \cite{FirstP300} and since then different versions of P300 based BCI systems were suggested. One example of such a paradigm is the P300 rapid serial visual presentation (RSVP) speller. In this paradigm letters are presented one after the other in a random order, and the subject is asked to pay attention only to one of the letters called \textit{target} letter or \textit{target stimuli} (by counting them silently, for example). Whenever a subject pays attention to the target letter, a special waveform called P300 is expected to occur. It is called P300 since there is usually a peak in the EEG amplitude 300ms after the presentation of a target event. The advantage of the RSVP paradigm is that it does not require any eye movements, and can thus be operated by patients who have lost control of their eye gaze completely.
 
 \section{Deep Neural Networks - Overview}
 
-Although there is no single definition for deep learning, it can be defined as a branch of machine learning that focus on using artificial neural networks (ANN). Deep neural network (DNN) is a combination of ANN layers. There are two main types of ANN architectures: feed forward neural networks (FFNN or FF) and recurrent neural network (RNN). In FFNN directed cycles are not allowed (i.e., data can flow only to the next layer), while the RNN architecture allows directed cycles within the network (i.e., data can also flow between 'neurons' in the same layer). The directed cycles in RNN allows the network to 'remember' past events and making it suitable for sequence learning \cite{rumelhart1985learning}.
+Although there is no single definition for deep learning, it can be defined as a branch of machine learning that focus on using artificial neural networks (ANN). Deep neural network (DNN) is a combination of ANN layers. There are two main types of ANN architectures: feed forward neural networks (FFNN or FF) and recurrent neural network (RNN). In FFNN directed cycles are not allowed (i.e., data can flow only to the next layer), while the RNN architecture allows directed cycles within the network (specifically, data can also flow between 'neurons' in the same layer). The directed cycles in RNN allows the network to 'remember' past events and making it suitable for sequence learning \cite{rumelhart1985learning}.
 
 \subsection{Layer Types}
 The architecture we propose is a combination of several ANN layer types described below:
@@ -453,7 +454,7 @@ Tab.\ref{table:AccuracyPerSubject} summarizes the results per single subject. Wh
 		\toprule
 		model &  \makecell{number of \\parameter} &  \makecell{accuracy \\
 			per subjects} & \makecell{accuracy \\
-			all subjects}&\makecell{all but one}&\makecell{all but one \\ after fine tuning}\\
+			all subjects}&\makecell{all but one}&\makecell{all but one \\ after fine\\tuning}\\
 		\midrule
 		LDA            &            1375 &                   0.96 &                  0.79 &                           0.65 &                                                 x \\
 		%MLP            &             148201 &                   0.88 &                     x &                              x &                                                 x \\
@@ -473,7 +474,7 @@ Tab.\ref{table:AccuracyPerSubject} summarizes the results per single subject. Wh
 	\label{table:AccuracyPerSubject}	
 	\begin{tabular}{l|ccccccc}
 		\toprule
-		{subject} &   LDA &   LSTM large &  LSTM-CNN large &   CNN &  LSTM small& LSTM-CNN small \\
+		{subject} &   LDA &\makecell{LSTM\\large}&  \makecell{LSTM-CNN\\large}&   CNN &\makecell{LSTM\\ small}&\makecell{LSTM-CNN\\small}\\
 		\midrule
 		fat     &  1.00 &  0.98 &      0.98 &  0.98 &        1.00 &            0.95 \\
 		gcb     &  0.91 &  0.82 &      0.88 &  0.92 &        0.74 &            0.75 \\
@@ -500,7 +501,7 @@ In the second stage, we continue to train the model on the rest $3/4$ of the \te
 	\label{table:AllExceptOne}	
 	\begin{tabular}{l|ccccc}
 		\toprule
-		{subject} & \makecell{LDA \\ all except one} &  \makecell{CNN\\all except one}&  \makecell{CNN\\all except one\\fine tune}& \makecell{SMALL\\LSTM-CNN\\all except one}&\makecell{SMALL\\LSTM-CNN\\all except one \\ fine tune} \\
+		{subject} & \makecell{LDA \\all except\\one} &  \makecell{CNN\\all except\\one}&  \makecell{CNN\\all except\\one\\fine tune}& \makecell{SMALL\\LSTM-CNN\\all except\\one}&\makecell{SMALL\\LSTM-CNN\\all except \\one \\ fine tune} \\
 		\midrule
 		fat     &                  0.94 &                  1.00 &                            1.00 &                             0.98 &                                               1.00 \\
 		gcb     &                  0.43 &                  0.83 &                            0.91 &                             0.86 &                                               0.92 \\
@@ -542,7 +543,7 @@ If $f(x_{1}, ..., x_{n})$ is a differentiable, scalar-valued function, its gradi
 The results displayed in Fig.\ref{fig:CNNSaliencyMap2} and Fig.\ref{fig:LSTMCNNSaliencyMap2} show the average absolute gradient across all \textit{target} samples of a single cross validation test data: the warm colors correspond to high gradient values, indicating that the model is more sensitive to change in this input feature. We can see the sensitivity of the CNN model spread across the recording relatively evenly as opposed to the LSTM-CNN which is focused around the 250ms and 450ms time-stamps.
 
 \begin{small}
-	\captionof{table}{Accuracy when introducing temporal noise.}
+
 	\label{table:ResistenceToNoise}
 	\centering
 	
@@ -558,7 +559,7 @@ The results displayed in Fig.\ref{fig:CNNSaliencyMap2} and Fig.\ref{fig:LSTMCNNS
 		120  &         0.042 &              0.042 &         0.059 \\
 		\bottomrule
 	\end{tabular}
-	
+		\captionof{table}{Accuracy when introducing temporal noise. Statistically significant results are highlighted in bold.}
 \end{small}
 
 \vspace{0.5cm}
