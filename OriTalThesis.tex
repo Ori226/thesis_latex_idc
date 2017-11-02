@@ -205,7 +205,8 @@ P300-based BCI systems rely on identifying the times when a subject is required 
 
 \section{Deep Neural Networks - Overview}
 
-Although there is no single definition for deep learning, it can be defined as a branch of machine learning that focus on using artificial neural networks (ANN). Deep neural network (DNN) is a combination of ANN layers. There are two main types of ANN architectures: feed forward neural networks (FFNN or FF) and recurrent neural network (RNN). In FFNN directed cycles are not allowed (i.e., data can flow only to the next layer), while the RNN architecture allows directed cycles within the network (specifically, data can also flow between 'neurons' in the same layer). The directed cycles in RNN allows the network to 'remember' past events and making it suitable for sequence learning \cite{rumelhart1985learning}.
+
+Deep neural network (DNN) means relatively large artificial neural network with multiple layers. There are two main types of ANN architectures: feed forward neural networks (FFNN or FF) and recurrent neural network (RNN). In FFNN directed cycles are not allowed (i.e., data can flow only to the next layer), while the RNN architecture allows directed cycles within the network (specifically, data can also flow between 'neurons' in the same layer). The directed cycles in RNN allows the network to 'remember' past events and making it suitable for sequence learning \cite{rumelhart1985learning}.
 
 \subsection{Layer Types}
 The architecture we propose is a combination of several ANN layer types described below:
@@ -217,7 +218,7 @@ where $x$ is the input vector, $W$ is a matrix that represents a linear mapping 
 
 \[{\rm{ReLu}}\left( x \right) = \max \left( {x,0} \right) \,\,\,,\,\,\,{\rm{sigmoid}}\left( x \right) = \frac{1}{{1 + {e^{ - x}}}}\,\,\,,\,\,\,{\mathop{\rm Tan}\nolimits} {\rm{H}}\left( x \right) = \frac{{{e^x} - {e^{ - x}}}}{{{e^x} + {e^{ - z}}}}\]
 
-Fig.\ref{fig:FF_Example} shows an example of simple fully connected layer with two inputs, 1 hidden layer with 3 cells and 2 outputs. All the nodes in the hidden cells are connected to all input and output nodes. Since it is a feed forward architecture, the data flows only in one direction: from the input, to the hidden layer, and then to the output.
+Fig.\ref{fig:FF_Example} shows an example of a simple network with two inputs and outputs, and one fully connected layer with 3 cells and. All the nodes in the hidden layer are connected to all input and output nodes. Since it is a feed forward architecture, the data flows only in one direction: from the input, to the hidden layer, and then to the output.
 
 \begin{figure}
 \centering
@@ -240,8 +241,9 @@ If the kernel is a 1D filter with a length of $k$ and the next layer has $M$ out
 \end{figure}
 
 \textbf{Recurrent Neural Network Layer - RNN} - The simplest form of a recurrent neural network \cite{rumelhart1985learning, werbos1988generalization} is a layer where the output is connected to the input. Unlike feed forward layers, in RNN, $y[t]$ (the layer output at time $t$) is a function of both the current input $x[t]$ and $y[t-1]$ (the previous state): 
-
-	$y\left( t \right) = \sigma \left( {x\left[t \right]W + y\left[ {t - 1} \right]U + b} \right)$
+\begin{equation}
+	y\left( t \right) = \sigma \left( {x\left[t \right]W + y\left[ {t - 1} \right]U + b} \right)
+\end{equation}
 
 Here, again $\sigma $ is a non-linear activation function, $W$ is the input weight matrix and $U$ is the previous results weight matrix. The structure of an RNN layer, allows the network to contain memory, since it has access to information from previous time-stamps within each predicted sample. RNN is known to suffer from phenomena called "vanishing gradient" and "exploding gradient" \cite{pascanu2013difficulty}: while training, the gradient of the loss function may not propagate to the first layers (i.e., layers closer to the input layer) or may have very large values (thus update the layer weight too much). These problems prevent learning long temporal dependencies (the full explanation is beyond the scope of this report see \cite{bengio1994learning}) .A common solution for these problem is called Long Short Term Memory layer.
 
@@ -253,25 +255,39 @@ Here, again $\sigma $ is a non-linear activation function, $W$ is the input weig
 	\label{fig:RNN_Example}
 \end{figure}
 
+
+
 \begin{figure}
 	\centering
-	\includegraphics[width=1.0\linewidth]{LSTM_RNN_placeholder_clear.png}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\centering
+		\includegraphics[height=5cm]{LSTM_RNN_placeholder_clear_vanilla_rnn.png}
+		\caption{First}\label{fig:f}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\centering
+		\includegraphics[height=5cm]{LSTM_RNN_placeholder_clear_lstm.png}
+		\caption{Second}\label{fig:s}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\centering
+		\includegraphics[height=5cm]{LSTM_RNN_placeholder_clear_legend.png}
+
+	\end{subfigure}
 	\caption{A schematic illustration of the Simple Recurrent Network unit (left) and a Long Short-Term Memory block (right) as used
-		in the hidden layers of a recurrent neural network. Taken from \cite{ greff2017lstm}}	
-	
+		in the hidden layers of a recurrent neural network. Taken from \cite{ greff2017lstm}}
 	\label{fig:LSTM_arch}
 \end{figure}
-\textbf{Long Short Term Memory Layer - LSTM} - LSTM is a type of RNN with a special architecture designed to overcome RNN's difficulties in learning long term dependencies. Each unit in an LSTM layer has two outputs: $y[t]$ - the main output and $c[t]$ - the unit's memory. LSTM uses an architecture with a set of "gates" in order to control the data flow and overcoming the vanishing and exploding gradients mentioned above. The right illustration in Fig.\ref{fig:LSTM_arch} and Eq.\ref{eq_lstm} describes the LSTM function:
 
-\begin{equation} \label{eq_lstm}
-\begin{array}{l}
-f\left( t \right) = {\rm{sigmoid}}\left( {{W_f}x\left( t \right) + {U_f}y\left( {t - 1} \right) + {b_f}} \right)\\
-i\left( t \right) = {\rm{sigmoid}}\left( {{W_i}x\left( t \right) + {U_i}y\left( {t - 1} \right) + {b_i}} \right)\\
-o\left( t \right) = {\rm{sigmoid}}\left( {{W_o}x\left( t \right) + {U_o}y\left( {t - 1} \right) + {b_o}} \right)\\
-c\left( t \right) = f\left( t \right) \circ c\left( {t - 1} \right) + \tanh \left( {i\left( t \right) \circ {W_c}x\left( t \right) + {U_C}y\left( {t - 1} \right) + {b_c}} \right)\\
-y\left( t \right) = o\left( t \right) \circ \tanh \left( {c\left( t \right)} \right)
-\end{array}
-\end{equation}
+
+
+
+
+
+
+
+
+\textbf{Long Short Term Memory Layer - LSTM} - LSTM is a type of RNN with a special architecture designed to overcome RNN's difficulties in learning long term dependencies. In addition to the output - $y[t]$, LSTM also has a memory cell - $c[t]$. LSTM uses an architecture with a set of "gates" that allow it to decide whether when a data should be stored in the memory unit, and by that, overcoming the vanishing and exploding gradients problem mentioned above. The right illustration in Fig.\ref{fig:LSTM_arch} and Eq.\ref{eq_lstm} describes the LSTM function:
 
 ${W_{\left\{ {i,p,f,o} \right\}}}$ represents weights of the current state and  ${U_{\left\{ {i,p,f,o} \right\}}}$ represents weights of the previous states. 
 
@@ -280,7 +296,7 @@ ${W_{\left\{ {i,p,f,o} \right\}}}$ represents weights of the current state and  
 There are many methods for building systems that can identify the P300 target for a BCI task. Blankertz et al.~\cite{P300_Tutorial} suggest 
 selecting the time intervals with maximal separation between the target and non target samples, averaging their \textit{electro-potential} value and use shrinkage LDA to classify these features. Using this method has a drawback due to the low complexity of the LDA model \cite{cincotti2003comparison}. The winner of the BCI competition III: dataset II used an ensemble of support vector machines (SVM) \cite{P300SVMWinner}, and other methods include hidden Markov model, k-nearest neighbours, and more  \cite{cincotti2003comparison}.
 
-More recently, given the success of `deep' neural networks \cite{krizhevsky2012imagenet}, there have been several attempts to apply `deep learning' for BCI related tasks. Cecotti and Graser~\cite{P300_CNN} were the first to use CNNs  for a P300 speller. In their work, they train an ensemble of CNN-based P300 classifiers to identify the existence of a P300 event. Manor and Geva~\cite{RSVP_P300_geva} used CNN for the RSVP P300 classification task and suggested a new spatio-temporal regularization which have shown improvement in the performance.
+More recently, given the success of deep neural networks \cite{krizhevsky2012imagenet}, there have been several attempts to apply `deep learning' for BCI related tasks. Cecotti and Graser~\cite{P300_CNN} were the first to use CNNs  for a P300 speller. In their work, they train an ensemble of CNN-based P300 classifiers to identify the existence of a P300 event. Manor and Geva~\cite{RSVP_P300_geva} used CNN for the RSVP P300 classification task and suggested a new spatio-temporal regularization which have shown improvement in the performance.
 
 
 Unlike feed forward network models such as CNN and multi-layer perceptron (MLP),  the RNN architecture allows directed cycles within the network, which enable the model to ``memorize past events''. LSTM \cite{LSTM_origin} is a type of RNN, which includes a special node that can be described as a differentiable memory cell. The specific architecture of LSTM enables it to overcome some of the weakness of simple RNNs~\cite{bengio1994learning}.
@@ -437,7 +453,7 @@ RMSProp \cite{tieleman2012lecture} is a stochastic gradient descent (SGD) method
 \section{Implementation Details}
 The code was implemented using the Keras framework \cite{chollet2015keras}. Training was conducted using a 4-core i7 laptop with 16Gb RAM. Training took 110 seconds on 192000 samples for the small LSTM-CNN model and 24 seconds for the CNN model. The considerable difference is due to the distributed nature of  CNN which allows much of the computation to be computed in parallel. Predicting on a single example takes about 0.6 milliseconds. In term of space, both models require less than 70kb of disk space.
 
-One of the advantages of using "deep learning" models is that they allow compressing knowledge from many samples into a compact form. As we show in our experiments, it is possible to pre-train on multiple subjects and then fine tune to a specific subject's calibration data. For example, training on 3000 calibration samples using the 4-core i7 laptop will take less than a minute (fine-tuning for 30 epochs). After the model is trained, using it for real-time prediction is feasible as well, since predicting each sample takes 0.6 milliseconds.
+One of the advantages of using 'deep learning' models is that they allow compressing knowledge from many samples into a compact form. As we show in our experiments, it is possible to pre-train on multiple subjects and then fine tune to a specific subject's calibration data. For example, training on 3000 calibration samples using the 4-core i7 laptop will take less than a minute (fine-tuning for 30 epochs). After the model is trained, using it for real-time prediction is feasible as well, since predicting each sample takes 0.6 milliseconds.
 
 \chapter{Results}
 
@@ -597,7 +613,7 @@ The results displayed in Fig.\ref{fig:CNNSaliencyMap2} and Fig.\ref{fig:LSTMCNNS
 \chapter{Discussion and Future Directions}
 In this work we examined the use of LSTM neural networks for the task of BCI P300 speller. Despite its temporal nature, no version of LSTM investigated in this work has shown a significant advantage compared to the CNN model suggested by \cite{P300_CNN}. We did see LSTM results improve with large amounts of data from multiple subjects, and superior results with a combined CNN-LSTM model; moreover, we have shown that this combined model is significantly more robust to temporal noise in the stimuli onset. We also show that the sensitivity of the LSTM based model is much more focused on the area between 250ms to 450ms than CNN based model. This sensitivity is correlated with what we know about the P300 ERP (a peak around 300ms after the stimuli onset). We suggest that the smaller area of sensitivity explains the robustness of the LSTM model to noise in the time domain, since it is less sensitive to the data outside the P300 phenomena. 
 
-In our research we found that the effectiveness of "deep learning" models is seen as we increase our dataset size. Ideally, one could use a large database with many samples but this may be very expensive and impractical. A possible solution will be to gather existing recordings from different devices, experiments or even tasks. Another solution will be to explore different data augmentation techniques. 
+In our research we found that the effectiveness of 'deep learning' models is seen as we increase our dataset size. Ideally, one could use a large database with many samples but this may be very expensive and impractical. A possible solution will be to gather existing recordings from different devices, experiments or even tasks. Another solution will be to explore different data augmentation techniques. 
 
 
 %----------------------------------------------------------------------------------------
