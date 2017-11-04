@@ -61,6 +61,8 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{amsmath}
 \usepackage{tabularx}
 \usepackage{scrextend}
+\usepackage{subcaption}
+\captionsetup[subfigure]{labelfont=rm}
 
 \usepackage[autostyle=true]{csquotes}
 \graphicspath{ {Figures/} }
@@ -262,21 +264,19 @@ Here, again $\sigma $ is a non-linear activation function, $W$ is the input weig
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[height=5cm]{LSTM_RNN_placeholder_clear_vanilla_rnn.png}
-		\caption{First}\label{fig:f}
+		\caption{A schematic diagram of the vanilla RNN}\label{fig:vanilla_rnn}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[height=5cm]{LSTM_RNN_placeholder_clear_lstm.png}
-		\caption{Second}\label{fig:s}
+		\caption{A schematic diagram LSTM block. \cite{ greff2017lstm}}\label{fig:lstm_sketch}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[height=5cm]{LSTM_RNN_placeholder_clear_legend.png}
 
 	\end{subfigure}
-	\caption{A schematic illustration of the Simple Recurrent Network unit (left) and a Long Short-Term Memory block (right) as used
-		in the hidden layers of a recurrent neural network. Taken from \cite{ greff2017lstm}}
-	\label{fig:LSTM_arch}
+
 \end{figure}
 
 
@@ -287,9 +287,8 @@ Here, again $\sigma $ is a non-linear activation function, $W$ is the input weig
 
 
 
-\textbf{Long Short Term Memory Layer - LSTM} - LSTM is a type of RNN with a special architecture designed to overcome RNN's difficulties in learning long term dependencies. In addition to the output - $y[t]$, LSTM also has a memory cell - $c[t]$. LSTM uses an architecture with a set of "gates" that allow it to decide whether when a data should be stored in the memory unit, and by that, overcoming the vanishing and exploding gradients problem mentioned above. The right illustration in Fig.\ref{fig:LSTM_arch} and Eq.\ref{eq_lstm} describes the LSTM function:
+\textbf{Long Short Term Memory Layer - LSTM} - LSTM is a type of RNN with a special architecture designed to overcome RNN's difficulties in learning long term dependencies. In addition to the output - $y[t]$, LSTM also has a memory cell - $c[t]$. LSTM uses an architecture with a set of "gates" that allow it to decide whether when a data should be stored in the memory unit, and by that, overcoming the vanishing and exploding gradients problem mentioned above. Fig.\ref{fig:vanilla_rnn} Fig.\ref{fig:lstm_sketch} show the difference between vanilla RNN and LSTM.
 
-${W_{\left\{ {i,p,f,o} \right\}}}$ represents weights of the current state and  ${U_{\left\{ {i,p,f,o} \right\}}}$ represents weights of the previous states. 
 
 
 \chapter{Previous work}
@@ -325,11 +324,11 @@ In P300 speller the task is to identify which letter the subject paid his attent
 	\item [$C$] The set of all the available stimuli 
 	\item [$\hat{c}$] The predicted target stimuli
 	\item [$c*$] The true target stimuli (i.e. the letter the subject was suppose to focus on)	
-	\item [$R$] Group of trial
+	\item [$R$] Group of trial (see below)
 	\item [$x_{c,r}$] An EEG sample data that was recorded when presented character $c$ on trial $r$
 \end{labeling}
 
-A \underline{\textit{trial}} is the presentation of all the characters in an alphabet, one after the other, in random order. In each trial, only one letter is the actual target stimuli.  
+A trial is the presentation of all the characters in an alphabet, one after the other, in random order. In each trial, only one letter is the actual target stimuli.  
 
 The predicted character $\hat{c}$ in a single trial is computed by finding the character with maximal value of $f(x)$ among the group of letters ($C$):
 
@@ -420,7 +419,7 @@ In order to examine the power of each method in modelling the inter-subject and 
 \begin{enumerate}
 	\item Training and testing on each subject's data separately in order to explore intra-subject generalization.
 	\item Training and testing on different subjects data combined in order to investigate the impact of larger amounts of data.
-	\item Training on all subjects expect one. We conduct this experiment in order to explore the value of using a model that was trained off-line, on different subjects, and then use this model on new subject, with or without additional calibration.
+	\item Transfer learning between subjects - training on all subjects expect one. We conduct this experiment in order to explore the value of using a model that was trained off-line, on different subjects, and then use this model on new subject, with or without additional calibration.
 \end{enumerate}
 									
 In addition to the three experiments above, we also examine the model's tolerance to time domain noise. A highly desired property from BCI systems is tolerance to a small degree of noise in the stimuli onset time.  In order to evaluate the resistance to such noise, we use a model trained on the original stimuli onset (i.e, noise level = 0ms) and evaluate its performance on different stimuli onset: noise levels of -120ms,-80ms,-40ms, +40ms, +80ms, and 120ms. We conducted this experiment using 10-fold cross validation in order to be able to get statistically significant results. This last experiment was conducted only on the CNN and LSTM-CNN models and used data from all subjects (as in experiment 2 described above).
@@ -442,11 +441,11 @@ RMSProp \cite{tieleman2012lecture} is a stochastic gradient descent (SGD) method
 	\begin{subfigure}[t]{1.0\textwidth}
 		\centering
 		\includegraphics[width=1.1\linewidth]{Figures/LSTM_CNN_detailed}
-		\caption{A diagram of the CNN-LSTM model used in our experiments. Unlike the CNN model, there are connections between cells from the same layer. The inter-layer connection allows the network to model the signal dynamics.}
+		\caption{A diagram of the CNN-LSTM model used in our experiments. Unlike the CNN model, there are connections between cells from the same layer.}
 		\label{fig:LSTM_CNN_detailed}
 	\end{subfigure}
 
-	\caption{An additional illustration showing the main differences between the CNN and LSTM-CNN architectures.}
+	\caption{An additional illustration highlighting the main differences between the CNN and LSTM-CNN architectures.}
 \end{figure*}
 
 
@@ -613,7 +612,7 @@ The results displayed in Fig.\ref{fig:CNNSaliencyMap2} and Fig.\ref{fig:LSTMCNNS
 \chapter{Discussion and Future Directions}
 In this work we examined the use of LSTM neural networks for the task of BCI P300 speller. Despite its temporal nature, no version of LSTM investigated in this work has shown a significant advantage compared to the CNN model suggested by \cite{P300_CNN}. We did see LSTM results improve with large amounts of data from multiple subjects, and superior results with a combined CNN-LSTM model; moreover, we have shown that this combined model is significantly more robust to temporal noise in the stimuli onset. We also show that the sensitivity of the LSTM based model is much more focused on the area between 250ms to 450ms than CNN based model. This sensitivity is correlated with what we know about the P300 ERP (a peak around 300ms after the stimuli onset). We suggest that the smaller area of sensitivity explains the robustness of the LSTM model to noise in the time domain, since it is less sensitive to the data outside the P300 phenomena. 
 
-In our research we found that the effectiveness of 'deep learning' models is seen as we increase our dataset size. Ideally, one could use a large database with many samples but this may be very expensive and impractical. A possible solution will be to gather existing recordings from different devices, experiments or even tasks. Another solution will be to explore different data augmentation techniques. 
+In our research we found that the effectiveness of 'deep learning' models is seen as we increase our dataset size. Ideally, one could use a large database with many samples but this may be very expensive and impractical. We shown, that one of the advantage of deep neural networks is their ability for transfer learning between subjects. It can be interesting to explore the network ability to achieve transfer learning between different experiments, task and recording devices, and by that, increase the data set size.  
 
 
 %----------------------------------------------------------------------------------------
