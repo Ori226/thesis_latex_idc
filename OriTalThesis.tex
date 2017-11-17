@@ -199,7 +199,7 @@ Special  thanks to my wife Shira, for her utmost support, patience and belief in
 
 \textit{This thesis is based on an article presented in the 7th Graz Brain-Computer Interface Conference. While the article  is focused on describing our results, in this report we added a more detailed explanation about the method we were using in our experiments.}
 
-Neural networks have recently been shown to achieve outstanding performance in several machine learning domains such as image recognition \cite{krizhevsky2012imagenet} and voice recognition ~\cite{hinton2012deep}. Most of these breakthroughs have been achieved with convolutional neural networks (CNNs)~\cite{Lenet98}, but some promising results has also been demonstrated by using recurrent neural networks (RNNs) for tasks such as speech and handwriting recognition~\cite{graves2013speech, graves2008unconstrained}, usually when using the long short-term memory (LSTM) architecture ~\cite{LSTM_origin}.
+Neural networks have recently been shown to achieve outstanding performance in several machine learning domains such as image recognition \cite{krizhevsky2012imagenet} and voice recognition ~\cite{hinton2012deep}. Most of these breakthroughs have been achieved with convolutional neural networks (CNNs)~\cite{Lenet98}, but some promising results have also been demonstrated by using recurrent neural networks (RNNs) for tasks such as speech and handwriting recognition~\cite{graves2013speech, graves2008unconstrained}, usually when using the long short-term memory (LSTM) architecture ~\cite{LSTM_origin}.
 
 There have been some studies using 'deep neural networks' for P300 classification \cite{P300_CNN, RSVP_P300_geva}. The results reported, despite some success, do not show the same dramatic progress achieved by 'deep learning' methods as compared to the previous state of the art; while in areas such as image or voice recognition `deep' neural networks have resulted in classification accuracy exceeding other methods by far, this has not yet been the case with EEG in general and in P300 detection specifically. The small number of samples typically available in neuroscience (or brain computer interface - BCI) is most likely one of the main reasons for theses results. In addition, the high dimensionality of the EEG signal, the low signal to noise (SNR) and the existence of outliers in the data, pose other difficulties when trying to use neural networks for BCI tasks (see \cite{lotte2007review}). The main question in this research is whether the RNN model, and particularly LSTM, can enhance the accuracy of P300-based BCI systems and if so, under what conditions.
 
@@ -208,7 +208,7 @@ P300-based BCI systems rely on identifying the times when a subject is required 
 \section{Deep Neural Networks - Overview}
 
 
-Deep neural network (DNN) means relatively large artificial neural network (ANN) with multiple layers. There are two main types of ANN architectures: feed forward neural networks (FFNN or FF) and recurrent neural network (RNN). In FFNN directed cycles are not allowed (i.e., data can flow only to the next layer), while the RNN architecture allows directed cycles within the network (specifically, data can also flow between 'neurons' in the same layer). The directed cycles in RNN allows the network to 'remember' past events and making it suitable for sequence learning \cite{rumelhart1985learning}.
+Deep neural networks (DNN) are relatively large artificial neural networks (ANN) with multiple layers. There are two main types of ANN architectures: feed forward neural networks (FFNN or FF) and recurrent neural network (RNN). In FFNN directed cycles are not allowed (i.e., data can flow only to the next layer), while the RNN architecture allows directed cycles within the network (specifically, data can also flow between 'neurons' in the same layer). The directed cycles in RNN allows the network to 'remember' past events and making it suitable for sequence learning \cite{rumelhart1985learning}.
 
 \subsection{Layer Types}
 The architecture we propose is a combination of several ANN layer types described below:
@@ -287,7 +287,7 @@ Here, again $\sigma $ is a non-linear activation function, $W$ is the input weig
 
 
 
-\textbf{Long Short Term Memory Layer - LSTM} - LSTM is a type of RNN with a special architecture designed to overcome RNN's difficulties in learning long term dependencies. In addition to the output - $y[t]$, LSTM also has a memory cell - $c[t]$. LSTM uses an architecture with a set of "gates" that allow it to decide whether a data should be stored in the memory unit or not. The gating mechanism was prove to overcome the vanishing and exploding gradients problem mentioned above (see ~\cite{LSTM_origin}). Fig.\ref{fig:vanilla_rnn} and Fig.\ref{fig:lstm_sketch} shows the difference between vanilla RNN and LSTM.
+\textbf{Long Short Term Memory Layer - LSTM} - LSTM is a type of RNN with a special architecture designed to overcome RNN's difficulties in learning long term dependencies. In addition to the output - $y[t]$, LSTM also has a memory cell - $c[t]$. LSTM uses an architecture with a set of "gates" that allow it to decide whether a data should be stored in the memory unit or not. The gating mechanism has been prove to overcome the vanishing and exploding gradients problem mentioned above (see ~\cite{LSTM_origin}). Fig.\ref{fig:vanilla_rnn} and Fig.\ref{fig:lstm_sketch} shows the difference between vanilla RNN and LSTM.
 
 
 
@@ -441,7 +441,7 @@ RMSProp \cite{tieleman2012lecture} is a stochastic gradient descent (SGD) method
 	\begin{subfigure}[t]{1.0\textwidth}
 		\centering
 		\includegraphics[width=1.1\linewidth]{Figures/LSTM_CNN_detailed}
-		\caption{A diagram of the CNN-LSTM model used in our experiments. Unlike the CNN model, there are connections between cells from the same layer.}
+		\caption{A diagram of the CNN-LSTM model used in our experiments. Unlike the CNN model, there are connections between cells from the same layer. Only the last sequence is connected to the fully connected layer.}
 		\label{fig:LSTM_CNN_detailed}
 	\end{subfigure}
 
